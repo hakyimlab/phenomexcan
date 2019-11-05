@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rsync -avzh ./src/ ~/spark08/phenomexcan/github_phenomexcan/src/
+
