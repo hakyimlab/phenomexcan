@@ -36,6 +36,7 @@ $ conda activate YOUR_CONDA_ENV_NAME
 ```
 
 # Manuscript content
-## Figures
 
 Coming soon.
+
+## Figures
