@@ -14,13 +14,13 @@ Large-scale genomic and transcriptomic initiatives offer unprecedented ability t
 PhenomeXcan can be accessed in several ways:
 
  * **phenomexcan.org**: the quickest one is going to http://phenomexcan.org, where you can query by trait or gene, specify thresholds for p-values or regional colocalizagion probability (RCP), etc.
- * **Results summary**: if you want a more direct access, you can download the processed result files in Zenodo: https://doi.org/10.5281/zenodo.3530669. Here you can download three files:
+ * **Results summary**: if you want a more direct access, you can download the processed result files in Zenodo: https://doi.org/10.5281/zenodo.3530669. Here you'll find three files:
    * `smultixcan-mashr-pvalues.tsv.gz`: this is a matrix of p-values of S-MultiXcan results for 4,091 traits and 22,515 genes.
-   * `fastenloc-torus-rcp.tsv.gz`: this is a matrix of RCP of fastENLOC results for 4,091 traits and 37,967 genes. To obtain this matrix, for each cell (trait-gene pair), we summed the RCP across gene clusters, and then took the max RCP across tissues.
-   * `smultixcan_and_clinvar-z2.tsv.gz`: this is matrix with 4,091 general traits in the rows (from UK Biobank and other GWAS) and 5,106 diseases from ClinVar. Each cell has the mean squared z-score from S-MultiXcan using all the genes reported for the ClinVar trait. See the manuscript for more details.
+   * `fastenloc-torus-rcp.tsv.gz`: this is a matrix of RCP of fastENLOC results for 4,091 traits and 37,967 genes. To obtain this matrix, for each cell (trait-gene pair), we summed the RCP across gene clusters, and then took the maximum RCP across tissues.
+   * `smultixcan_and_clinvar-z2.tsv.gz`: this is a matrix with 4,091 general traits in the rows (from UK Biobank and other GWAS) and 5,106 diseases from ClinVar. Each cell has the mean squared z-score from S-MultiXcan using all the genes reported for the ClinVar trait. See the manuscript for more details.
  * **Full results set** (coming soon): if you need to access all the raw results (i.e all S-PrediXcan and fastENLOC results across all tissues, TORUS fine-mapping results, etc), you can download them from this [UChicago Box shared folder](https://uchicago.box.com/s/i6vocl9pq59gydzpefidexodyuhegmde).
 
-The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with all the gene associations across 4,091 traits that are Bonferroni significant (p < 5.5e-10) and have a Regional Colocalization Probability (RCP) > 0.1. You also can obtain this result by combining the two matrices mentioned above: `smultixcan-mashr-pvalues.tsv.gz` and `fastenloc-torus-rcp.tsv.gz`.
+The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with all the gene associations across 4,091 traits that are Bonferroni significant (p < 5.5e-10) and have an RCP > 0.1. You also can obtain this result by combining the two matrices mentioned above: `smultixcan-mashr-pvalues.tsv.gz` and `fastenloc-torus-rcp.tsv.gz`.
 
 
 # Code
