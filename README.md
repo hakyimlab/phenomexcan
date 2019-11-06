@@ -6,6 +6,9 @@ PhenomeXcan: mapping the genome to the phenome through the transcriptome
 # Data
 
 # Code
+
+We'll be releasing the source code soon.
+
 ## Conda environment
 
 Create a new Conda environment with this command:
