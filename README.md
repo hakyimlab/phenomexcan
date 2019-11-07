@@ -1,8 +1,7 @@
 # PhenomeXcan
 
-PhenomeXcan: mapping the genome to the phenome through the transcriptome
+[bioRxiv manuscript](https://doi.org/10.1101/833210): PhenomeXcan: Mapping the genome to the phenome through the transcriptome
 
-(bioRxiv coming soon)
 
 ## Summary
 
