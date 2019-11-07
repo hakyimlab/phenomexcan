@@ -12,7 +12,7 @@ Large-scale genomic and transcriptomic initiatives offer unprecedented ability t
 
 PhenomeXcan can be accessed in several ways:
 
- * **phenomexcan.org**: the quickest one is going to http://phenomexcan.org, where you can query by trait or gene, specify thresholds for p-values or regional colocalizagion probability (RCP), etc.
+ * **phenomexcan.org**: the quickest one is going to http://phenomexcan.org, where you can query by trait or gene, specify thresholds for p-values or regional colocalization probability (RCP), etc.
  * **Results summary**: if you want a more direct access, you can download the processed result files in Zenodo: https://doi.org/10.5281/zenodo.3530669. Here you'll find three files:
    * `smultixcan-mashr-pvalues.tsv.gz`: this is a matrix of p-values of S-MultiXcan results for 4,091 traits and 22,515 genes.
    * `fastenloc-torus-rcp.tsv.gz`: this is a matrix of RCP of fastENLOC results for 4,091 traits and 37,967 genes. To obtain this matrix, for each cell (trait-gene pair), we summed the RCP across gene clusters, and then took the maximum RCP across tissues.
