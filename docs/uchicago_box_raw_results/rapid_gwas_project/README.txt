@@ -29,7 +29,7 @@ torus). To obtain any of these results, follow these steps:
  2. Check the integrity of all parts to make sure they were correctly
     downloaded by running:
 
-    $ md5sum -c MD5SUM.txt
+    $ cat MD5SUM.txt | grep _part_ | md5sum -c
 
  3. Combine all parts to get the final archive. For instance, for S-PrediXcan:
 
