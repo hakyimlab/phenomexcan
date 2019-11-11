@@ -1,5 +1,5 @@
-PhenomeXcan - GTEx GWAS manuscript traits
-=========================================
+PhenomeXcan - Full results set
+==============================
 
 If you use this resource, please cite these two manuscripts:
 
@@ -10,6 +10,8 @@ If you use this resource, please cite these two manuscripts:
    diseases and traits. bioRxiv, doi: https://doi.org/10.1101/814350
 
 
-This folder contains the full set of raw results for 42 traits from the GTEx
-GWAS manuscript: S-MultiXcan, S-PrediXcan and ENLOC.
+The subfolder rapid_gwas_project contains all results for 4,049 traits from the
+Rapid GWAS Project (http://www.nealelab.is/uk-biobank), and the gtex_gwas
+subfolder contains 42 extra traits from the GTEx GWAS manuscript
+(https://doi.org/10.1101/814350).
 

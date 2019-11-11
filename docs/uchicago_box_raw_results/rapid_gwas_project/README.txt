@@ -1,6 +1,15 @@
 PhenomeXcan - Rapid GWaS Project
 ================================
 
+If you use this resource, please cite these two manuscripts:
+
+ - PhenomeXcan: Mapping the genome to the phenome through the transcriptome.
+   bioRxiv, doi: https://doi.org/10.1101/833210
+
+ - Widespread dose-dependent effects of RNA expression and splicing on complex
+   diseases and traits. bioRxiv, doi: https://doi.org/10.1101/814350
+
+
 This folder contains the full set of raw results for 4,049 traits from the
 Rapid GWAS Project: S-MultiXcan, S-PrediXcan, fastENLOC and TORUS.
 
