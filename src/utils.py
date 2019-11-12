@@ -43,7 +43,6 @@ def chunker(seq, size):
 
 
 def simplify_string(s):
-
     # Remove all non-word characters (everything except numbers and letters)
     s = re.sub(r"[^\w\s]", '', s)
 
