@@ -3,6 +3,7 @@ from os.path import join
 
 # General settings
 N_JOBS = 4
+N_JOBS_HIGH = 20 # for low-computational tasks
 
 # Main folders
 BASE_DIR = '/mnt/phenomexcan_base/'
