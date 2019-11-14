@@ -1,3 +1,4 @@
+name: /mnt/tmp/conda/phenomexcan_final
 channels:
   - defaults
 dependencies:
@@ -9,6 +10,7 @@ dependencies:
   - binutils_linux-64=7.2.0=had2808c_27
   - blas=1.0=mkl
   - bleach=3.1.0=py37_0
+  - blosc=1.16.3=hd408876_0
   - bwidget=1.9.11=1
   - bzip2=1.0.8=h7b6447c_0
   - ca-certificates=2019.10.16=0
@@ -20,6 +22,7 @@ dependencies:
   - decorator=4.4.1=py_0
   - defusedxml=0.6.0=py_0
   - entrypoints=0.3=py37_0
+  - et_xmlfile=1.0.1=py37_0
   - expat=2.2.6=he6710b0_0
   - fontconfig=2.13.0=h9420a91_0
   - freetype=2.9.1=h8a8886c_1
@@ -37,6 +40,7 @@ dependencies:
   - gxx_impl_linux-64=7.2.0=hdf63c60_3
   - gxx_linux-64=7.2.0=h550dcbe_27
   - harfbuzz=1.8.8=hffaf4a1_0
+  - hdf5=1.10.4=hb1b8bf9_0
   - icu=58.2=h9c2bf20_1
   - importlib_metadata=0.23=py37_0
   - intel-openmp=2019.4=243
@@ -44,6 +48,7 @@ dependencies:
   - ipython=7.6.1=py37h39e3cac_0
   - ipython_genutils=0.2.0=py37_0
   - ipywidgets=7.5.1=py_0
+  - jdcal=1.4.1=py_0
   - jedi=0.15.1=py37_0
   - jinja2=2.10.3=py_0
   - joblib=0.13.2=py37_0
@@ -69,6 +74,8 @@ dependencies:
   - libuuid=1.0.3=h1bed415_2
   - libxcb=1.13=h1bed415_1
   - libxml2=2.9.9=hea5a465_1
+  - lz4-c=1.8.1.2=h14c3975_0
+  - lzo=2.10=h49e0be7_2
   - make=4.2.1=h1bed415_1
   - markupsafe=1.1.1=py37h7b6447c_0
   - matplotlib=3.1.1=py37h5429711_0
@@ -77,13 +84,16 @@ dependencies:
   - mkl-service=2.3.0=py37he904b0f_0
   - mkl_fft=1.0.14=py37ha843d7b_0
   - mkl_random=1.1.0=py37hd6b4f25_0
+  - mock=3.0.5=py37_0
   - more-itertools=7.2.0=py37_0
   - nbconvert=5.6.0=py37_1
   - nbformat=4.4.0=py37_0
   - ncurses=6.1=he6710b0_1
   - notebook=6.0.1=py37_0
+  - numexpr=2.7.0=py37h9e4a6bb_0
   - numpy=1.16.5=py37h7e9f1db_0
   - numpy-base=1.16.5=py37hde5b4d6_0
+  - openpyxl=3.0.0=py_0
   - openssl=1.1.1d=h7b6447c_3
   - pandas=0.24.2=py37he6710b0_0
   - pandoc=2.2.3.2=0
@@ -103,6 +113,7 @@ dependencies:
   - pyparsing=2.4.2=py_0
   - pyqt=5.9.2=py37h05f1152_2
   - pyrsistent=0.15.4=py37h7b6447c_0
+  - pytables=3.6.1=py37h71ec239_0
   - python=3.7.5=h0371630_0
   - python-dateutil=2.8.0=py37_0
   - pytz=2019.3=py_0
@@ -258,6 +269,7 @@ dependencies:
   - setuptools=41.6.0=py37_0
   - sip=4.19.8=py37hf484d3e_0
   - six=1.12.0=py37_0
+  - snappy=1.1.7=hbae5bb6_3
   - sqlite=3.30.1=h7b6447c_0
   - statsmodels=0.10.1=py37hdd07704_0
   - terminado=0.8.2=py37_0
@@ -280,3 +292,4 @@ dependencies:
   - pip:
     - jupyterlab==1.2.0
     - jupyterlab-server==1.0.6
+prefix: /mnt/tmp/conda/phenomexcan_final

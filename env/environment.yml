@@ -18,6 +18,8 @@ dependencies:
   - statsmodels=0.10
   - xlrd=1.2
   - xlwt=1.3
+  - pytables=3.6
+  - openpyxl=3.0
   - pip:
     - jupyterlab==1.2.0       
     - jupyterlab-server==1.0.6
