@@ -13,6 +13,7 @@ DATA_DIR = join(BASE_DIR, 'data')
 RESULTS_DIR = join(BASE_DIR, 'results')
 GENE_ASSOC_DIR = join(BASE_DIR, 'gene_assoc')
 DELIVERABLES_DIR = join(BASE_DIR, 'deliverables')
+WEBAPP_DIR = join(BASE_DIR, 'webapp')
 
 # GTEx
 GTEX_DIR = join(DATA_DIR, 'gtex_v8')

@@ -8,42 +8,44 @@ from metadata import \
 
 class Trait:
     def _init_ukb_metadata(self):
+        self.is_from_rapid_gwas_project = True
         pheno_data = RAPID_GWAS_PHENO_INFO.loc[self.code]
+
         self.description = pheno_data['description']
         self.type = pheno_data['variable_type']
-        self.source = pheno_data['source']
-        self.sample_size = pheno_data['n_non_missing']
+        self.n = pheno_data['n_non_missing']
         self.n_cases = pheno_data['n_cases']
         self.n_controls = pheno_data['n_controls']
+        self.source = 'UK Biobank'
 
-    def _init_gtex_gwas_metadata(self, is_tag):
-        if is_tag:
-            pheno_data = GTEX_GWAS_PHENO_INFO[GTEX_GWAS_PHENO_INFO['Tag'] == 0]
-        else:
-            pheno_data = GTEX_GWAS_PHENO_INFO.loc[self.code]
+    def _init_gtex_gwas_metadata(self):
+        pheno_data = GTEX_GWAS_PHENO_INFO.loc[self.code]
 
         self.description = pheno_data['Phenotype']
-        self.type = None
         if pheno_data['Binary'] == 1:
             self.type = 'binary'
-        self.source = pheno_data['source']
-        self.sample_size = pheno_data['Sample_Size']
+        else:
+            self.type = 'continuous_raw' # we don't know if it was transformed, actually
+        self.source = pheno_data['Consortium']
+        self.n = pheno_data['Sample_Size']
         self.n_cases = pheno_data['Cases']
-        self.n_controls = self.sample_size - self.n_cases
+        self.n_controls = self.n - self.n_cases
 
     def __init__(self, code):
+        self.is_from_rapid_gwas_project = False
         self.code = code
 
         if self.code in RAPID_GWAS_PHENO_INFO.index:
             self._init_ukb_metadata()
         elif self.code in GTEX_GWAS_PHENO_INFO.index:
-            self._init_gtex_gwas_metadata(is_tag=False)
-        elif self.code in GTEX_GWAS_PHENO_INFO['Tag']:
-            self._init_gtex_gwas_metadata(is_tag=True)
+            self._init_gtex_gwas_metadata()
         else:
             raise ValueError(f'Invalid phenotype code: {self.code}')
 
     def get_plain_name(self):
+        if not self.is_from_rapid_gwas_project:
+            return self.code
+
         if not pd.isnull(self.description):
             return f'{self.code}-{simplify_string(self.description)}'
         else:
