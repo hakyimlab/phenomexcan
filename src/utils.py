@@ -4,6 +4,7 @@ import logging
 
 
 LOG_FORMAT = "[%(filename)s - %(asctime)s] %(levelname)s: %(message)s"
+HDF5_KEY_NO_PATTERN = re.compile('[^0-9a-zA-Z_]')
 
 
 def get_logger(filename=None):
@@ -50,6 +51,11 @@ def simplify_string(s):
     s = re.sub(r"\s+", '_', s)
 
     return s
+
+
+def simplify_string_for_hdf5(pheno_full_code):
+    clean_col = re.sub(HDF5_KEY_NO_PATTERN, '_', pheno_full_code)
+    return 'c' + clean_col
 
 
 def is_number(s):
