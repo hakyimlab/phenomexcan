@@ -9,6 +9,7 @@ from utils import simplify_string_for_hdf5
 
 parser = argparse.ArgumentParser(description='S-MultiXcan results processor.')
 parser.add_argument('--smultixcan-file', required=True, type=str)
+parser.add_argument('--smultixcan-file-pattern', required=True, type=str, help='Must contain a named grouped called "code"')
 parser.add_argument('--fastenloc-h5-file', required=True, type=str)
 parser.add_argument('--phenotypes-info-file', required=True, type=str)
 parser.add_argument('--gene-mappings-file', required=True, type=str)
@@ -40,7 +41,13 @@ smultixcan_data['n_indep'] = smultixcan_data['n_indep'].astype(int)
 
 # add pheno info columns
 smultixcan_filename = os.path.basename(args.smultixcan_file)
-pheno_code = smultixcan_filename.split('smultixcan_')[1].split('_ccn30')[0]
+
+match = re.search(args.smultixcan_file_pattern, smultixcan_filename)
+if match is not None and 'code' in match.groupdict().keys():
+    pheno_code = match.group('code')
+else:
+    raise ValueError('Regex did not match or no "code" named group found.')
+
 pheno_desc = pheno_id_to_unique_desc[pheno_code]
 pheno_full_code = pheno_id_to_full_code[pheno_code]
 pheno_source = pheno_id_to_source[pheno_code]

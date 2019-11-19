@@ -12,7 +12,10 @@ python ${SCRIPT_DIR}/process_smultixcan.py \
 EOM
 
 export SMULTIXCAN_RESULTS_DIR_00="/mnt/phenomexcan_base/results/smultixcan/rapid_gwas_project"
+export SMULTIXCAN_PATTERN_00='^smultixcan_(?P<code>.*)_ccn30\.tsv\.gz$'
+
 export SMULTIXCAN_RESULTS_DIR_01="/mnt/phenomexcan_base/results/smultixcan/gtex_gwas"
+export SMULTIXCAN_PATTERN_01='^(?P<code>.*)_smultixcan_imputed_gwas_gtexv8mashr_ccn30\.txt$'
 
 OUTPUT_FILE="${1}"
 if [ -z "${OUTPUT_FILE}" ]; then
@@ -28,9 +31,12 @@ fi
 echo "Using n jobs: ${N_JOBS}"
 
 echo "Adding header"
-parallel -j1 "${COMMAND} | head -1 > ${OUTPUT_FILE}" ::: `ls ${SMULTIXCAN_RESULTS_DIR_00}/* | head -1`
+parallel -j1 "${COMMAND} --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | head -1 > ${OUTPUT_FILE}" ::: `ls ${SMULTIXCAN_RESULTS_DIR_00}/* | head -1`
 
 echo "Adding data"
-parallel -j${N_JOBS} "${COMMAND} --no-header | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" \
-  ::: ${SMULTIXCAN_RESULTS_DIR_00}/* ${SMULTIXCAN_RESULTS_DIR_01}/*
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" \
+  ::: ${SMULTIXCAN_RESULTS_DIR_00}/*
+
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_01}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" \
+  ::: ${SMULTIXCAN_RESULTS_DIR_01}/*
 
