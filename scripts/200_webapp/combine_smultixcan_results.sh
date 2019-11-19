@@ -34,9 +34,7 @@ echo "Adding header"
 parallel -j1 "${COMMAND} --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | head -1 > ${OUTPUT_FILE}" ::: `ls ${SMULTIXCAN_RESULTS_DIR_00}/* | head -1`
 
 echo "Adding data"
-parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" \
-  ::: ${SMULTIXCAN_RESULTS_DIR_00}/*
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" ::: ${SMULTIXCAN_RESULTS_DIR_00}/*
 
-parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_01}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" \
-  ::: ${SMULTIXCAN_RESULTS_DIR_01}/*
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_01}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" ::: ${SMULTIXCAN_RESULTS_DIR_01}/*
 
