@@ -21,7 +21,7 @@ class Trait:
     def _init_gtex_gwas_metadata(self):
         pheno_data = GTEX_GWAS_PHENO_INFO.loc[self.code]
 
-        self.description = pheno_data['Phenotype']
+        self.description = pheno_data['new_Phenotype'].replace('_', ' ')
         if pheno_data['Binary'] == 1:
             self.type = 'binary'
         else:
@@ -41,6 +41,32 @@ class Trait:
             self._init_gtex_gwas_metadata()
         else:
             raise ValueError(f'Invalid phenotype code: {self.code}')
+
+    def get_unique_description(self):
+        """This method assumes we are only using the phenotypes in PhenomeXcan (4,091 traits)"""
+        if not self.is_from_rapid_gwas_project:
+            return self.description
+
+        if pd.isnull(self.description):
+            return self.code
+
+        if (
+             self.code.startswith('22601_') or # Job codings
+             self.code.startswith('20003_') or # Medication vitamin c
+             (self.description in (
+                 'Weight',
+                 'Poultry intake',
+                 'Other and unspecified dermatitis',
+                 'Certain infectious and parasitic diseases',
+                 'Body mass index (BMI)',
+                 'Beef intake',
+             ))
+           ):
+            return f'{self.description} ({self.code})'
+        elif self.code in ('SNORING',):
+            return f'{self.description} (FinnGen)'
+
+        return self.description
 
     def get_plain_name(self):
         if not self.is_from_rapid_gwas_project:
