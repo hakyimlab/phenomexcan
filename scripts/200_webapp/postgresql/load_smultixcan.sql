@@ -17,14 +17,7 @@ create table smultixcan (
 
 \copy smultixcan from /mnt/tmp/output_full.tsv with delimiter as E'\t' csv header;
 
--- perform an explain analyze before creating indexes
-
---CREATE INDEX gene_name_idx ON smultixcan (gene_name);
---CREATE INDEX pheno_desc_idx ON smultixcan (pheno_desc);
---CREATE INDEX pvalue_idx ON smultixcan (pvalue);
---CREATE INDEX rcp_idx ON smultixcan (rcp);
-
---CREATE EXTENSION pg_trgm;
---CREATE INDEX smultixcan_ukb_trait_00 ON smultixcan USING gin (ukb_trait gin_trgm_ops);
---CREATE INDEX smultixcan_ukb_clinvar_00 ON smultixcan USING gin (clinvar_trait gin_trgm_ops);
-
+CREATE INDEX pvalue_idx ON smultixcan (pvalue);
+CREATE INDEX pheno_desc_pvalue_idx ON smultixcan (pheno_desc, pvalue);
+CREATE INDEX gene_name_pvalue_idx ON smultixcan (gene_name, pvalue);
+CREATE INDEX pheno_desc_gene_name_pvalue_idx ON smultixcan(pheno_desc, gene_name, pvalue);

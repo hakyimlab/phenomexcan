@@ -10,4 +10,7 @@ create table ukb_clinvar (
 
 \copy ukb_clinvar from /mnt/tmp/ukb_clinvar.tsv with delimiter as E'\t' csv header;
 
--- check which indexes are worth creating
+CREATE INDEX sqrt_z2_avg_idx ON ukb_clinvar (sqrt_z2_avg);
+CREATE INDEX ukb_trait_z2_idx ON ukb_clinvar (ukb_trait, sqrt_z2_avg);
+CREATE INDEX clinvar_trait_z2_idx ON ukb_clinvar (clinvar_trait, sqrt_z2_avg);
+CREATE INDEX ukb_trait_clinvar_trait_z2_idx ON ukb_clinvar (ukb_trait, clinvar_trait, sqrt_z2_avg);
