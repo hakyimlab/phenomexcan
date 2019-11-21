@@ -106,3 +106,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+scripts/200_webapp/shinyapp/.Rproj.user/
