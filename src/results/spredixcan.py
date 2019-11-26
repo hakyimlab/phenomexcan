@@ -3,6 +3,7 @@ import re
 from glob import glob
 
 import numpy as np
+from scipy import stats
 import pandas as pd
 
 from entity import Trait
@@ -65,12 +66,34 @@ class PhenoResults:
         self.file_by_tissue = {m.group('tissue'): m.string for m in csv_files_matches}
         self.tissues = [m.group('tissue') for m in csv_files_matches]
 
-    def get_consensus_effect_direction(self):
-        pass
+    def get_consensus_effect_direction(self, pval_threshold=1e-4):
+        def _get_effect_direction(zscores):
+            zscores = zscores.dropna()
+            if zscores.shape[0] == 0:
+                return np.nan
+
+            pvalues = pd.Series(stats.norm.cdf(np.abs(zscores) * -1.0) * 2.0, index=zscores.index.tolist())
+
+            pvalues = pvalues[pvalues < pval_threshold]
+            if pvalues.shape[0] == 0:
+                return np.nan
+
+            zscores = zscores.loc[pvalues.index]
+            zscores_sign = np.sign(zscores)
+            zscores_sign_counts = zscores_sign.value_counts()
+            return zscores_sign_counts.sort_values(ascending=False).index[0]
+
+        data_dict = {t:self.get_tissue_data(t, 'zscore', index_col='gene_simple') for t in self.tissues}
+        data = pd.DataFrame(data_dict)
+        return data.apply(_get_effect_direction, axis=1)
 
     def get_most_significant_effect_direction(self, pvalue_threshold=1e-4):
-        def _get_effect_direction(x):
-            x_min, x_max = x.min(), x.max()
+        def _get_effect_direction(zscores):
+            zscores = zscores.dropna()
+            if zscores.shape[0] == 0:
+                return np.nan
+
+            x_min, x_max = zscores.min(), zscores.max()
 
             # if min and max are similar, then it's 0 (tie)
             if np.isclose(np.abs(x_min), np.abs(x_max)):
