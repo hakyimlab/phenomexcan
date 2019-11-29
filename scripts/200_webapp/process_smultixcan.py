@@ -11,6 +11,8 @@ parser = argparse.ArgumentParser(description='S-MultiXcan results processor.')
 parser.add_argument('--smultixcan-file', required=True, type=str)
 parser.add_argument('--smultixcan-file-pattern', required=True, type=str, help='Must contain a named grouped called "code"')
 parser.add_argument('--fastenloc-h5-file', required=True, type=str)
+parser.add_argument('--spredixcan-most_signif-dir-effect-h5-file', required=True, type=str)
+parser.add_argument('--spredixcan-consensus-dir-effect-h5-file', required=True, type=str)
 parser.add_argument('--phenotypes-info-file', required=True, type=str)
 parser.add_argument('--gene-mappings-file', required=True, type=str)
 parser.add_argument('--no-header', required=False, action='store_true')
@@ -70,12 +72,22 @@ fastenloc_data = pd.read_hdf(args.fastenloc_h5_file, key=simplify_string_for_hdf
 smultixcan_data = smultixcan_data.reset_index().set_index('gene_id', drop=False)
 smultixcan_data = smultixcan_data.assign(rcp=fastenloc_data)
 
+# add direction of effect
+most_signif_direction_effect = pd.read_hdf(args.spredixcan_most_signif_dir_effect_h5_file, key=simplify_string_for_hdf5(pheno_full_code))
+most_signif_direction_effect = most_signif_direction_effect.astype('category').cat.rename_categories({-1.0: '-1', 0.0: '0', 1.0: '1'})
+smultixcan_data = smultixcan_data.assign(dir_effect_most_signif=most_signif_direction_effect)
+
+consensus_direction_effect = pd.read_hdf(args.spredixcan_consensus_dir_effect_h5_file, key=simplify_string_for_hdf5(pheno_full_code))
+consensus_direction_effect = consensus_direction_effect.astype('category').cat.rename_categories({-1.0: '-1', 0.0: '0', 1.0: '1'})
+smultixcan_data = smultixcan_data.assign(dir_effect_consensus=consensus_direction_effect)
+
 # reorder columns
 smultixcan_data = smultixcan_data.set_index('gene')
 smultixcan_data = smultixcan_data[[
     'gene_name', 'band',
     'pheno_desc', 'pheno_source', # 'pheno_full_code'
     'pvalue',
+    'dir_effect_most_signif', 'dir_effect_consensus',
     'n', 'n_indep',
     'p_i_best', 't_i_best',
     'rcp',

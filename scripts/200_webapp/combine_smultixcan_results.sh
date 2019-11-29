@@ -7,6 +7,8 @@ read -r -d '' COMMAND << EOM
 python ${SCRIPT_DIR}/process_smultixcan.py \
   --smultixcan-file {} \
   --fastenloc-h5-file /mnt/phenomexcan_base/gene_assoc/fastenloc-torus-rcp.h5 \
+  --spredixcan-most_signif-dir-effect-h5-file /mnt/phenomexcan_base/gene_assoc/spredixcan-mashr-effect_direction-most_signif.h5 \
+  --spredixcan-consensus-dir-effect-h5-file /mnt/phenomexcan_base/gene_assoc/spredixcan-mashr-effect_direction-consensus.h5 \
   --phenotypes-info-file /mnt/phenomexcan_base/deliverables/phenotypes_info.tsv.gz \
   --gene-mappings-file /mnt/phenomexcan_base/deliverables/genes_info.tsv.gz
 EOM
