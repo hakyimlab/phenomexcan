@@ -6,22 +6,28 @@ S-MultiXcan results for the Rapid GWAS project and the GTEx GWAS traits.
 
 1. Generate a file with all results:
 ```bash
-$ combine_smultixcan_results.sh /mnt/tmp/output_full.tsv 4
-Output file: /mnt/tmp/output_full.tsv
+$ bash combine_smultixcan_results.sh /mnt/tmp/output_full.tsv 4
+Output file: /mnt/tmp/output.tsv
 Using n jobs: 4
 Adding header
 Adding data
 ```
-where `/mnt/tmp/output_full.tsv` is the output file and `4` the number of jobs.
+where `/mnt/tmp/output.tsv` is the output file and `4` the number of jobs.
 
 1. Make sure the output file was correctly created:
 ```bash
 $ cat /mnt/tmp/output.tsv | awk -F'\t' '{print NF-1}' | sort | uniq -c
-91055811 10
+91055811 12
 ```
-A correct output must show 10 tabs per line, as shown above.
+A correct output must show a single line (for example, 10 tabs per line, as shown above).
 
-1. Load the data into a local PostgreSQL database (preferably version 11):
+1. Now generate the needed files for the UK Biobank/ClinVar table by running:
+```bash
+$ bash ../run_nb.sh 10_generate_ukb_clinvar_table.ipynb
+```
+
+1. Load the data into a local PostgreSQL database (preferably version 11). Check the `.sql`
+files to verify the file paths.
 ```bash
 $ export DBUSER="your_postgresql_user"
 $ export DBPORT="5432"
@@ -31,7 +37,9 @@ CREATE TABLE
 COPY 4091
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_genes.sql
-
+DROP TABLE
+CREATE TABLE
+COPY 22515
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_smultixcan.sql
 DROP TABLE
@@ -39,6 +47,12 @@ CREATE TABLE
 COPY 91055810
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_ukb_clinvar_phenos.sql
+DROP TABLE
+CREATE TABLE
+COPY 4091
+DROP TABLE
+CREATE TABLE
+COPY 5106
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_ukb_clinvar.sql
 DROP TABLE
@@ -108,7 +122,11 @@ gcloud sql import sql $INSTANCE_NAME \
     --user=postgres
 ```
 
-TODO: indexes, vacuum, etc
+Finally, inside a Cloud SQL shell, update the stats of the database so the indexes
+are correctly used:
+```bash
+vacuum analyze;
+```
 
 
 ## Shinyapp deploy
