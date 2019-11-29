@@ -292,4 +292,5 @@ dependencies:
   - pip:
     - jupyterlab==1.2.0
     - jupyterlab-server==1.0.6
+    - papermill==1.2.1
 prefix: /mnt/tmp/conda/phenomexcan_final
