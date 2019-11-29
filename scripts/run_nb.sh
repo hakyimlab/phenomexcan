@@ -6,9 +6,12 @@ if [ -z "${1}" ]; then
   exit 1
 fi
 
+filename="${1%.*}.run.ipynb"
+
 export PYTHONPATH=`pwd`/../src/
-jupyter nbconvert \
-  --ExecutePreprocessor.timeout=0 \
-  --to notebook \
-  --execute ${1}
+papermill \
+  --log-output \
+  --request-save-on-cell-execute \
+  $1 \
+  $filename
 
