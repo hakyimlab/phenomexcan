@@ -81,6 +81,9 @@ class PhenoResults:
             zscores = zscores.loc[pvalues.index]
             zscores_sign = np.sign(zscores)
             zscores_sign_counts = zscores_sign.value_counts()
+            # check if there is a tie
+            if zscores_sign_counts.shape[0] == 2 and zscores_sign_counts.unique().shape[0] == 1:
+                return 0.0
             return zscores_sign_counts.sort_values(ascending=False).index[0]
 
         data_dict = {t:self.get_tissue_data(t, 'zscore', index_col='gene_simple') for t in self.tissues}
