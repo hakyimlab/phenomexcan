@@ -45,6 +45,8 @@ $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_smultix
 DROP TABLE
 CREATE TABLE
 COPY 91055810
+CREATE INDEX
+...
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_ukb_clinvar_phenos.sql
 DROP TABLE
@@ -55,9 +57,11 @@ CREATE TABLE
 COPY 5106
 
 $ psql -h localhost -U $DBUSER -p $DBPORT -d postgres -f postgresql/load_ukb_clinvar.sql
-DROP TABLE
-CREATE TABLE
+DROP TABLE   
+CREATE TABLE 
 COPY 20888646
+CREATE INDEX 
+...
 ```
 
 1. Dump the local PostgreSQL database:
@@ -77,18 +81,12 @@ $ gcloud sql instances create $INSTANCE_NAME \
     --region="us-central1" \
     --storage-auto-increase \
     --availability-type=ZONAL \
-    --authorized-networks=[IP_ADDR1],[IP_ADDR2] \
+    --authorized-networks=54.204.34.9,54.204.36.75,54.204.37.78,34.203.76.245,3.217.214.132,34.197.152.155 \
     --storage-size=40
 ```
 
-Replace `[IP_ADDR1],[IP_ADDR2]` with the public IPs from where you will access
-the PostgreSQL database. For instance, Shinyapp, you need to specify (from
+The parameter `` are for allowing Shinyapp to make queries (taken from
 [here](https://docs.rstudio.com/shinyapps.io/applications.html#firewalls)):
-
-```
-...
---authorized-networks=54.204.34.9,54.204.36.75,54.204.37.78,34.203.76.245,3.217.214.132,34.197.152.155
-```
 
 ```bash
 $ read -s PASSWORD # enter your password here
@@ -130,4 +128,5 @@ vacuum analyze;
 
 
 ## Shinyapp deploy
-TODO
+
+Follow the steps described in the `shinyapp` folder.
