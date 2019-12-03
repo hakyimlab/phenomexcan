@@ -17,16 +17,16 @@ build_ui <- function() {
     releaseDate(),
     alertMessage(),
     dataInfo(),
-    modelsInfo(),
+    HTML('<hr style="color: purple;">'),
     htmlTemplate("modal.html",
                  title = uiOutput("modal_title"),
                  content = uiOutput("modal_content")
     ),
     h3("Results:"),
     fluidRow(
-      column(4, selectInput( "display", "What to show:",
-                                    c(Results = 'results',
-                                      Pairs = 'pairs'))),
+      column(4, selectInput( "display", "Result set:",
+                                    c(PhenomeXcan = 'results',
+                                      PhenomeXcan_Clinvar = 'pairs'))),
       column(8, div(""))
     ),
     conditionalPanel(
@@ -94,7 +94,8 @@ build_ui <- function() {
         #div("Hello there")
       )
     ),
-    
+
+    modelsInfo(),
     disclaimer(),
     cites()
   )

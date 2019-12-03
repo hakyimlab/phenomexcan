@@ -52,8 +52,18 @@ to_sql_list <- function(s) { sprintf("(values %s)", toString(sprintf("('%s')", s
 get_results_from_data_db_ <- function(input, table_sme, table_g) {
   CLAUSE <- "
 SELECT 
-  pheno_desc as phenotype, gene_name, pheno_source as type, band, gene, rcp as colocalization,
-  dir_effect_most_signif as dir_eff_signif, dir_effect_consensus as dir_eff_cons, pvalue, n as n_tissues, n_indep,
+  pheno_desc as phenotype, pheno_source as phenotype_source, gene_name, gene as gene_id, band as gene_band,
+  rcp, pvalue,
+  (case when dir_effect_most_signif = 1 then '+'
+        when dir_effect_most_signif = -1 then '-'
+        else ' '
+   end || ' / ' ||
+   case when dir_effect_consensus = 1 then '+'
+        when dir_effect_consensus = -1 then '-'
+        else ' '
+   end)
+   as effect_direction,
+  n as n_tissues, n_indep,
   t_i_best as best_tissue, p_i_best as best_tissue_p
 FROM smultixcan
 WHERE 1=1 

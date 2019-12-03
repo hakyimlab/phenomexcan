@@ -22,7 +22,7 @@ render_results <- function(data) {
   if (nrow(data)>0) {
     render <- render %>%
       DT::formatSignif('pvalue', 3) %>%
-      DT::formatSignif('colocalization', 3) %>%
+      DT::formatSignif('rcp', 3) %>%
       DT::formatSignif('best_tissue_p', 3)
   }
   render

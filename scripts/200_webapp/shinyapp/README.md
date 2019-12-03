@@ -12,7 +12,7 @@
 ```
 1. Before deploying to ShinyApps, you can try the app locally by running:
 ```R
-> shiny::runApp()
+> shiny::runApp(launch.browser=F)
 ```
 Keep in mind that you need to whitelist your public IP address in Cloud SQL.
 1. Deploy the app:

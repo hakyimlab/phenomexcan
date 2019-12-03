@@ -1,9 +1,11 @@
 appTitle_ <- "PhenomeXcan"
-releaseDate_ <- "Data Release: October 10, 2019."
+releaseDate_ <- "Release date: December 3, 2019."
 
 alertMessage_ <- ""  # Write an alert message here
 
-dataInfo_ <- "S-MultiXcan and fastENLOC results"
+dataInfo_ <- "PhenomeXcan synthesizes 8.87 million variants from GWAS on 4,091 traits with transcriptome
+regulation data from 49 tissues in GTEx v8 into an innovative, gene-based resource including 22,255 genes. See
+documentation below for more details on how to use this resource."
 
 appTitle <- function(){
   titlePanel(appTitle_) 
@@ -21,16 +23,36 @@ alertMessage <- function(){
 }
 
 dataInfo <- function(){
-  p(dataInfo_)
+    div(
+        p(dataInfo_),
+        p(strong('Please CITE if you are using this resource.'), 'See references below.')
+    )
 }
 
 modelsInfo <- function(){
-  div(
-    p("GTEx Prediction models and covariances were built with GTEx V8 on HapMap SNPs."),
-    p("Models from MASHR effect sizes on European individuals"),
-    p(strong("A p-value displayed as 0 is one to small for available numerical resolution")),
-    p(strong("z-scores are truncated to 40"))
-  )
+    h1 <- h3("Documentation")
+    d1 <- div(
+        p("Select the 'Result set' from 'PhenomeXcan' (4,091 traits and 22,255 gene associations) and 'PhenomeXcan_ClinVar'
+        (integration with 5,104 ClinVar traits). A p-value displayed as 0 is one to small for available numerical resolution."),
+    )
+    h2 <- h4("PhenomeXcan")
+    d2 <- div(
+        p("Columns meaning: phenotype_source ('UK Biobank' refer to our 4,049 traits from this cohort, other values indicate
+        different cohorts); rcp (Regional Colocalization Probability from fastENLOC); pvalue (p-value from S-MultiXcan),
+        effect_direction (contains the direction of effect of both the most significant tissue [first + or - sign] and the consensus among those
+        tissues with pvalue < 1e-4 [second +/- sign]); n_tissues (number of tissues available to S-MultiXcan when computing
+        significance for a gene); n_indep (number of independent components of variations among n_tissues);
+        best_ (single tissue S-PrediXcan stats)")
+    )
+    h3 <- h4("PhenomeXcan_ClinVar")
+    d3 <- div(
+        p("Columns meaning: zscore (this value is the average squared z-score from S-MultiXcan considering the genes
+        associated to the ClinVar trait; z-scores are truncated to 40); gene_names (genes name and band reported for
+        the ClinVar trait).")
+    )
+    
+    dd <- div(h1, d1, h2, d2, h3, d3)
+    dd
 }
 
 disclaimer <- function() {
