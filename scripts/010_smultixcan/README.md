@@ -11,7 +11,8 @@ https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh
 ```
 which is the one that works on CRI.
 
-You also need to use [Badger](https://github.com/hakyimlab/badger) to generate and run these jobs.
+You also need to use [Badger](https://github.com/hakyimlab/badger) to generate and run
+these jobs.
 
 # Execution
 
