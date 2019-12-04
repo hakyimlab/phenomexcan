@@ -56,13 +56,10 @@ SELECT
   rcp, pvalue,
   (case when dir_effect_most_signif = 1 then '+'
         when dir_effect_most_signif = -1 then '-'
-        else ' '
-   end || ' / ' ||
-   case when dir_effect_consensus = 1 then '+'
+        else '' end) as best_sign,
+  (case when dir_effect_consensus = 1 then '+'
         when dir_effect_consensus = -1 then '-'
-        else ' '
-   end)
-   as effect_direction,
+        else '' end) as consensus_sign,
   n as n_tissues, n_indep,
   t_i_best as best_tissue, p_i_best as best_tissue_p
 FROM smultixcan

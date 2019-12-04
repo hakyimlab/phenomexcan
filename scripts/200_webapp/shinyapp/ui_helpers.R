@@ -1,5 +1,5 @@
 appTitle_ <- "PhenomeXcan"
-releaseDate_ <- "Release date: December 3, 2019."
+releaseDate_ <- "Release date: December 4, 2019."
 
 alertMessage_ <- ""  # Write an alert message here
 
@@ -37,10 +37,16 @@ modelsInfo <- function(){
     )
     h2 <- h4("PhenomeXcan")
     d2 <- div(
-        p("Columns meaning: phenotype_source ('UK Biobank' refer to our 4,049 traits from this cohort, other values indicate
-        different cohorts); rcp (Regional Colocalization Probability from fastENLOC); pvalue (p-value from S-MultiXcan),
-        effect_direction (contains the direction of effect of both the most significant tissue [first + or - sign] and the consensus among those
-        tissues with pvalue < 1e-4 [second +/- sign]); n_tissues (number of tissues available to S-MultiXcan when computing
+        p("Columns meaning:
+        phenotype_source ('UK Biobank' refer to our 4,049 traits from this cohort, other values indicate
+        different cohorts);
+        rcp (Regional Colocalization Probability from fastENLOC);
+        pvalue (p-value from S-MultiXcan);
+        best_sign (contains the sign of effect of the most significant tissue; '+' ('-') means higher (lower) expression is
+        associated with higher risk or higher value of phenotype);
+        consensus_sign (contains the sign of effect of the consensus among those tissues with pvalue < 1e-4; '+' and '-' mean
+        the same as in the best_sign column);
+        n_tissues (number of tissues available to S-MultiXcan when computing
         significance for a gene); n_indep (number of independent components of variations among n_tissues);
         best_ (single tissue S-PrediXcan stats)")
     )

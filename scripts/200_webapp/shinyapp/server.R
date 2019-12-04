@@ -15,7 +15,10 @@ render_results <- function(data) {
     class = 'compact display',
     options = list(
       pageLength = 20,
-      lengthMenu = c(10, 20, 40, 100)
+      lengthMenu = c(10, 20, 40, 100),
+      columnDefs = list(
+        list(className = "dt-center", targets = c(8, 9))
+      )
     ),
     selection = 'single')
 
@@ -95,10 +98,10 @@ selected_data_from_table <- function(event, data) {
 ###############################################################################
 
 server <- function(input, output, session) {
-    updateSelectizeInput(session = session, inputId = 'gene_name', choices = c(Choose = '', genes_), server = TRUE)
-    updateSelectizeInput(session = session, inputId = 'pheno', choices = c(Choose = '', phenotypes_), server = TRUE)
-    updateSelectizeInput(session = session, inputId = 'ukb_trait', choices = c(Choose = '', ukb_phenotypes_), server = TRUE)
-    updateSelectizeInput(session = session, inputId = 'clinvar_trait', choices = c(Choose = '', clinvar_phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'gene_name', choices = c(genes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'pheno', choices = c(phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'ukb_trait', choices = c(ukb_phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'clinvar_trait', choices = c(clinvar_phenotypes_), server = TRUE)
   
     sm_data <- data.frame()
     
