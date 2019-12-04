@@ -90,7 +90,7 @@ class PhenoResults:
         data = pd.DataFrame(data_dict)
         return data.apply(_get_effect_direction, axis=1)
 
-    def get_most_significant_effect_direction(self, pvalue_threshold=1e-4):
+    def get_most_significant_effect_direction(self):
         def _get_effect_direction(zscores):
             zscores = zscores.dropna()
             if zscores.shape[0] == 0:
