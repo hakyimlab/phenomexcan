@@ -1,0 +1,61 @@
+---
+definitions:
+  command: "/gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/bin/fastenloc.static"
+
+  template: fastenloc.jinja
+  default_arguments:
+    job_memory: "4gb"
+    job_walltime: "06:00:00"
+    logs_folder: logs_fastenloc
+    n_cpu: 1
+
+  submission:
+    !PBSQueue
+      jobs_folder: jobs_fastenloc
+      job_name_key: job_name
+      fake_submission: true
+
+  constants:
+    torus_results_folder: &TORUS_RESULTS_FOLDER /scratch/mpividori/torus/
+    gtex_eqtl_annot_file: &GTEX_EQTL_ANNOT_FILE /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/gtex_v8.eqtl_annot.vcf.gz
+    gtex_eqtl_tissues_file: &GTEX_EQTL_TISSUES_FILE /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/gtex_v8.eqtl_annot.tissues.txt
+
+    results_folder: &RESULTS_FOLDER results/fastenloc
+  #Kind of ugly kink... need to add support for configurable inline template to pick up from configuration, to avoid duplicating "results"
+  pre_command:
+  - '[ -d results/fastenloc ] || mkdir -p results/fastenloc'
+
+arguments:
+  - !FilesInFolder
+    name: pip
+    sort: true
+    folder: *TORUS_RESULTS_FOLDER
+    regexp_filter: "(.*).gwas.imputed_v3.both_sexes.tsv.gz.pip.gz"
+    metadata_rules: [ !ExtractFromFileNameRegexpMetadata { path: trait } ]
+
+  - !Scalar { name: gtex_eqtl, prefix: "-e", value: *GTEX_EQTL_ANNOT_FILE }
+
+  - !Range { name: tissue, file_list: *GTEX_EQTL_TISSUES_FILE,
+     metadata_rules: [ !SaveValueInMetadata { path: tissue/name } ]
+     }
+
+  - !ArgumentFromMetadata
+    {name: tissue_param, prefix: "-t", format_rule: "{tissue}",
+          sources: [ {path: tissue/name, destination: tissue} ]}
+
+
+  #TODO: metadata rule that stores value, so that we pick the condition number
+  - !ArgumentFromMetadata
+    name: prefix
+  #    prefix: "-prefix"
+    prepend: *RESULTS_FOLDER
+    format_rule: "fastenloc-{trait}-{tissue}"
+    sources: [ {path: trait, destination: trait},
+               {path: tissue/name, destination: tissue },
+    ]
+
+  - !ArgumentFromMetadata
+    name: "job_name"
+    format_rule: "{tissue}_{trait}_fastenloc"
+    sources: [ {path: trait, destination: trait}, {path: tissue/name, destination: tissue} ]
+
