@@ -15,5 +15,17 @@ which is the one that works on CRI.
 
 # Execution
 
-The script `setup.sh` will run the jobs needed to prepare the environment. After those jobs
-finish successfully, you can run the `main.sh` script to generate the jobs for each GWAS.
+The script `setup.sh` will run the jobs needed to prepare the environment (you have
+to run it only once). After those jobs finish successfully, you can run the `main.sh`
+script to generate the jobs for each trait.
+
+To run for a single trait (over all tissues):
+
+```bash
+$ bash utils/run.sh _tmp/spredixcan/phesant/1180/ | qsub
+```
+
+To run all jobs (all traits and tissues):
+```bash
+$ parallel -j4 'bash utils/run.sh {} | qsub' ::: _tmp/spredixcan/phesant/*
+```

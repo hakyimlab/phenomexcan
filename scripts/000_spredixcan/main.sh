@@ -23,10 +23,4 @@ for SOURCE in ${SOURCES}; do
         --output-dir ${TMP_DIR} \
         --variable-type categorical ordinal binary continuous_raw \
         --sources ${SOURCE}
-
-    if [ "${PARAM0}" = "--run" ]; then
-        run_jobs
-        exit 0
-    fi
 done
-
