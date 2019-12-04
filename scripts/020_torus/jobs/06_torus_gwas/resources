@@ -1,0 +1,4 @@
+#PBS -l walltime=12:00:00
+#PBS -l mem=4gb
+#PBS -l nodes=1:ppn=__N_JOBS__
+

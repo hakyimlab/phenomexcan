@@ -1,0 +1,100 @@
+module load gcc/6.2.0 gsl/1.16 boost/1.70.0 zlib/1.2.11 bzip2
+
+N_JOBS=__N_JOBS__
+if [ -z "${N_JOBS}" ];then
+    N_JOBS=1
+fi
+
+export MKL_NUM_THREADS=${N_JOBS}
+export OPEN_BLAS_NUM_THREADS=${N_JOBS}
+export NUMEXPR_NUM_THREADS=${N_JOBS}
+export OMP_NUM_THREADS=${N_JOBS}
+
+PHENO_ID="__PHENO_ID__"
+
+echo "Phenotype: ${PHENO_ID}"
+
+mkdir -p ${GWAS_DIR}
+
+GWAS_ORIG_FILENAME="__PHENO_ORIG_FILE__"
+GWAS_NEW_FILENAME="__PHENO_NEW_FILE__"
+GWAS_NEW_FILENAME_UNCOMPRESSED="__PHENO_NEW_FILE_UNCOMPRESSED__"
+WGET_COMMAND="__WGET_COMMAND__"
+TISSUES="__TISSUES_SELECTED__"
+RESULT_FILES_SUFFIX="__METAXCAN_RESULT_FILENAME_SUFFIX__"
+
+WORK_DIR_BASE="${TMP_DIR}/${PHENO_ID}"
+mkdir -p ${WORK_DIR_BASE}
+JOURNAL_FILE="${WORK_DIR_BASE}/journal"
+
+if [ -f ${JOURNAL_FILE} ]; then
+    echo "Journal file found: ${JOURNAL_FILE}" | tee -a ${JOURNAL_FILE}
+else
+    touch ${JOURNAL_FILE}
+fi
+
+cd ${GWAS_DIR}
+
+CHECK=`grep -c "Step 01. Uncompressing" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 00. Running wget command" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME} ${GWAS_NEW_FILENAME_UNCOMPRESSED}
+    ${WGET_COMMAND}
+fi
+
+CHECK=`grep -c "Step 02. Torus format" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 01. Uncompressing" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_NEW_FILENAME_UNCOMPRESSED} # remove possibly partially uncompressed file
+
+    mv ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME}
+    #gunzip ${GWAS_NEW_FILENAME}
+fi
+
+
+CHECK=`grep -c "Step 03. Torus" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 02. Torus format" | tee -a ${JOURNAL_FILE}
+
+    . ${CONDA_PROFILE_FILE}
+    conda activate ${CONDA_ENV_CRI_UTILS}
+
+    python /home/mpividori/projects/cri_utils/phenomexcan/jobs/06_torus_gwas/process_gwas_for_torus.py \
+        --gwas-file ${GWAS_NEW_FILENAME} \
+        --region-map-file /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/pickrell_regions_map_file.tsv.gz \
+        --output-file ${GWAS_NEW_FILENAME}
+
+    retval=$?
+    if [ $retval -ne 0 ]; then
+        echo "Failed with code $retval"
+        exit 1
+    fi
+
+    conda deactivate
+fi
+
+
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 03. Torus" | tee -a ${JOURNAL_FILE}
+
+    /gpfs/data/im-lab/nas40t2/miltondp/software/bin/torus \
+        -d ${GWAS_NEW_FILENAME} \
+        --load_zval \
+        -dump_pip ${GWAS_NEW_FILENAME}.pip
+
+    cat ${GWAS_NEW_FILENAME}.pip | cut -f1,2,4 | gzip > ${GWAS_NEW_FILENAME}.pip.gz
+    rm ${GWAS_NEW_FILENAME}.pip
+
+    retval=$?
+    if [ $retval -ne 0 ]; then
+        echo "Failed with code $retval"
+        exit 1
+    fi
+
+    rm ${GWAS_NEW_FILENAME}
+fi
+
+echo "Finished" | tee -a ${JOURNAL_FILE}
+
