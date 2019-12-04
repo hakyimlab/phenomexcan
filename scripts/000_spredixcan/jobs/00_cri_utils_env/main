@@ -1,0 +1,14 @@
+#module load gcc/6.2.0 python/3.6.0
+#module load gcc/6.2.0 miniconda3/4.4.10
+#export PATH="/scratch/mpividori/software/miniconda3/bin/:${PATH}"
+
+. ${CONDA_PROFILE_FILE}
+
+rm -rf ${CONDA_ENV_CRI_UTILS}
+mkdir -p ${CONDA_ENV_DIR}
+
+conda create --yes -p ${CONDA_ENV_CRI_UTILS} python=3.7 ipython=7.5 numpy=1.16 pandas=0.24 scipy=1.2 r-base=3.5 r-essentials=3.5 r-devtools=1.13 rpy2=2.9 pyarrow=0.11
+
+# install susieR manually with: devtools::install_github("stephenslab/susieR")
+# JUST IN CASE check again the website to see if there is a stable release
+

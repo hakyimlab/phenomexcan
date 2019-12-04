@@ -1,0 +1,5 @@
+#!/bin/bash
+#PBS -N __PHENO_ID__
+#PBS -S /bin/bash
+#PBS -o __JOB_DIR__/
+#PBS -e __JOB_DIR__/

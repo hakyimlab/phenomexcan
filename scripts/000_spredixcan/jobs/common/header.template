@@ -1,0 +1,4 @@
+#!/bin/bash
+#PBS -N {JOB_NAME}
+#PBS -l walltime=00:30:00
+#PBS -l mem=1g

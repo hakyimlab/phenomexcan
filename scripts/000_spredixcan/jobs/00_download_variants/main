@@ -1,0 +1,27 @@
+wget https://www.dropbox.com/s/puxks683vb0omeg/variants.tsv.bgz?dl=0 -O ${VARIANTS_GZ_FILE}
+gunzip ${VARIANTS_GZ_FILE}
+
+# thin variants file
+cat ${VARIANTS_FILE} | cut -f4,5,6  > ${VARIANTS_THIN_FILE}
+wc -l ${VARIANTS_THIN_FILE}
+
+# thin variants with GTEx id
+. ${CONDA_PROFILE_FILE}
+
+conda activate ${CONDA_ENV_CRI_UTILS}
+
+echo "Using script from ${SCRIPTS_MATCH_SNPS_WITH_GTEXID}"
+python ${SCRIPTS_MATCH_SNPS_WITH_GTEXID} \
+  --variants-file-with-gtex-id ${MATCHED_SNPS_WITH_GTEXID_FILE} \
+  --variants-file-neale ${VARIANTS_FILE} \
+  --output-file ${VARIANTS_THIN_GTEXID_FILE}
+
+wc -l ${VARIANTS_THIN_GTEXID_FILE}
+
+# thin2 variants file
+cat ${VARIANTS_FILE} | cut -f2,3,4,5,6  > ${VARIANTS_THIN2_FILE}
+wc -l ${VARIANTS_THIN_FILE}
+
+
+rm ${VARIANTS_FILE}
+

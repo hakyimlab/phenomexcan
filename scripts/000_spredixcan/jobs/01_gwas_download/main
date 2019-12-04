@@ -1,0 +1,59 @@
+#module load gcc/6.2.0 miniconda3/4.4.10
+#module load gcc/6.2.0 R/3.4.1
+
+N_JOBS=__N_JOBS__
+if [ -z "${N_JOBS}" ];then
+    N_JOBS=1
+fi
+
+export MKL_NUM_THREADS=${N_JOBS}
+export OPEN_BLAS_NUM_THREADS=${N_JOBS}
+export NUMEXPR_NUM_THREADS=${N_JOBS}
+export OMP_NUM_THREADS=${N_JOBS}
+
+PHENO_ID="__PHENO_ID__"
+
+echo "Phenotype: ${PHENO_ID}"
+
+mkdir -p ${GWAS_DIR}
+
+CHR_PATTERN='__FILE_PATTERN__'
+
+GWAS_ORIG_FILENAME="__PHENO_ORIG_FILE__"
+GWAS_NEW_FILENAME="__PHENO_NEW_FILE__"
+GWAS_NEW_FILENAME_UNCOMPRESSED="__PHENO_NEW_FILE_UNCOMPRESSED__"
+WGET_COMMAND="__WGET_COMMAND__"
+TISSUES="__TISSUES_SELECTED__"
+RESULT_FILES_SUFFIX="__METAXCAN_RESULT_FILENAME_SUFFIX__"
+
+WORK_DIR_BASE="${TMP_DIR}/${PHENO_ID}"
+mkdir -p ${WORK_DIR_BASE}
+JOURNAL_FILE="${WORK_DIR_BASE}/journal"
+
+if [ -f ${JOURNAL_FILE} ]; then
+    echo "Journal file found: ${JOURNAL_FILE}" | tee -a ${JOURNAL_FILE}
+else
+    touch ${JOURNAL_FILE}
+fi
+
+cd ${GWAS_DIR}
+
+CHECK=`grep -c "Step 01. Uncompressing" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 00. Running wget command" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME} ${GWAS_NEW_FILENAME_UNCOMPRESSED}
+    ${WGET_COMMAND}
+fi
+
+CHECK=`grep -c "Step 99. Finished!" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 01. Uncompressing" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_NEW_FILENAME} # remove possibly partially uncompressed file
+
+    mv ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME}
+fi
+
+echo "Step 99. Finished!" | tee -a ${JOURNAL_FILE}
+

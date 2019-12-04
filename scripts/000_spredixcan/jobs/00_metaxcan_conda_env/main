@@ -1,0 +1,16 @@
+#module load gcc/6.2.0 miniconda3/4.4.10
+#export PATH="/scratch/mpividori/software/miniconda3/bin/:${PATH}"
+
+rm -rf ${CONDA_ENV_METAXCAN}
+mkdir -p ${CONDA_ENV_DIR}
+
+. ${CONDA_PROFILE_FILE}
+conda create --yes -p ${CONDA_ENV_METAXCAN} python=2.7 numpy scipy pandas mock sqlalchemy statsmodels h5py
+
+conda activate ${CONDA_ENV_METAXCAN}
+pip install h5py-cache
+
+# clone metaxcan
+rm -rf ${METAXCAN_DIR}
+git clone https://github.com/hakyimlab/MetaXcan.git ${METAXCAN_DIR}
+

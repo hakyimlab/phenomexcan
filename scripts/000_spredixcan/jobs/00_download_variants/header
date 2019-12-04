@@ -1,0 +1,4 @@
+#!/bin/bash
+#PBS -N 00_download_variants
+#PBS -o _logs/
+#PBS -e _logs/

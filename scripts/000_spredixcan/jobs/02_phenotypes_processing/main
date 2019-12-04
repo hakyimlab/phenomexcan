@@ -1,0 +1,132 @@
+#module load gcc/6.2.0 miniconda3/4.4.10
+
+. ${CONDA_PROFILE_FILE}
+
+export MKL_NUM_THREADS=1
+export OPEN_BLAS_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
+export OMP_NUM_THREADS=1
+
+PHENO_ID="__PHENO_ID__"
+
+echo "Phenotype: ${PHENO_ID}"
+
+mkdir -p ${GWAS_DIR}
+
+GWAS_ORIG_FILENAME="__PHENO_ORIG_FILE__"
+GWAS_NEW_FILENAME="__PHENO_NEW_FILE__"
+GWAS_NEW_FILENAME_UNCOMPRESSED="__PHENO_NEW_FILE_UNCOMPRESSED__"
+WGET_COMMAND="__WGET_COMMAND__"
+TISSUES="__TISSUES_SELECTED__"
+RESULT_FILES_SUFFIX="__METAXCAN_RESULT_FILENAME_SUFFIX__"
+
+WORK_DIR_BASE="${TMP_DIR}/${PHENO_ID}"
+mkdir -p ${WORK_DIR_BASE}
+JOURNAL_FILE="${WORK_DIR_BASE}/journal"
+
+if [ -f ${JOURNAL_FILE} ]; then
+    echo "Journal file found: ${JOURNAL_FILE}" | tee -a ${JOURNAL_FILE}
+else
+    touch ${JOURNAL_FILE}
+fi
+
+cd ${GWAS_DIR}
+
+CHECK=`grep -c "Step 01. Uncompressing" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 00. Running wget command" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME} ${GWAS_NEW_FILENAME_UNCOMPRESSED}
+    ${WGET_COMMAND}
+fi
+
+CHECK=`grep -c "Step 02. Pasting" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 01. Uncompressing" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${GWAS_NEW_FILENAME_UNCOMPRESSED} # remove possibly partially uncompressed file
+
+    mv ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME}
+    gunzip ${GWAS_NEW_FILENAME}
+fi
+
+WORK_DIR="${WORK_DIR_BASE}/work"
+mkdir -p ${WORK_DIR}
+
+CHECK=`grep -c "Step 03. Running S-PrediXcan:" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 02. Pasting" | tee -a ${JOURNAL_FILE}
+
+    cat ${GWAS_NEW_FILENAME_UNCOMPRESSED} | cut -f8-11 > ${WORK_DIR}/1.tsv
+    paste ${VARIANTS_THIN_FILE} ${VARIANTS_THIN_GTEXID_FILE} ${WORK_DIR}/1.tsv > ${WORK_DIR}/final.tsv
+    rm ${WORK_DIR}/1.tsv
+fi
+
+# Run MetaXcan
+CHECK=`grep -c "Step 04. Compressing" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 03. Running S-PrediXcan:" | tee -a ${JOURNAL_FILE}
+
+    # delete GWAS file
+    rm -rf ${GWAS_ORIG_FILENAME} ${GWAS_NEW_FILENAME} ${GWAS_NEW_FILENAME_UNCOMPRESSED}
+
+    conda activate ${CONDA_ENV_METAXCAN}
+
+    RESULT_PHENO_DIR="${METAXCAN_RESULTS_DIR}/${PHENO_ID}"
+    mkdir -p ${RESULT_PHENO_DIR}
+
+    for tissue in ${TISSUES}; do
+        CHECK=`grep -c "  ${tissue} done" ${JOURNAL_FILE}`
+        if [ "${CHECK}" = "1" ]; then
+            continue
+        fi
+
+        CSV_FILENAME="${PHENO_ID}-gtex_v8-${tissue}${RESULT_FILES_SUFFIX}.csv"
+        rm -rf ${RESULT_PHENO_DIR}/${CSV_FILENAME}
+
+        LOG_FILENAME="${PHENO_ID}-gtex_v8-${tissue}${RESULT_FILES_SUFFIX}.log"
+
+        python ${METAXCAN_DIR}/software/MetaXcan.py \
+            --model_db_path ${METAXCAN_GTEX_V8_MODELS_DIR}/${METAXCAN_GTEX_V8_FILES_PREFIX}${tissue}.db \
+            --covariance ${METAXCAN_GTEX_V8_COVARS_DIR}/${METAXCAN_GTEX_V8_FILES_PREFIX}${tissue}.txt.gz \
+            --gwas_folder ${WORK_DIR} \
+            --gwas_file_pattern "final.*tsv" \
+            --separator $'\t' \
+            --non_effect_allele_column "ref" \
+            --effect_allele_column "alt" \
+            --snp_column  "${METAXCAN_RUN_SNP_COLUMN}" \
+            --beta_column "beta" \
+            --se_column "se" \
+            ${METAXCAN_RUN_EXTRA_OPTIONS} --output_file ${RESULT_PHENO_DIR}/${CSV_FILENAME} >> ${RESULT_PHENO_DIR}/${LOG_FILENAME} 2>&1
+
+        echo "  ${tissue} done" | tee -a ${JOURNAL_FILE}
+    done
+fi
+
+conda deactivate
+
+# Compress the directory
+TAR_FILENAME="${PHENO_ID}-gtex_v8${RESULT_FILES_SUFFIX}.tar.gz"
+
+CHECK=`grep -c "Step 05. Deleting raw results" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 04. Compressing" | tee -a ${JOURNAL_FILE}
+
+    tar -czf ${METAXCAN_RESULTS_DIR}/${TAR_FILENAME} -C ${METAXCAN_RESULTS_DIR}/ ${PHENO_ID}
+fi
+
+CHECK=`grep -c "Step 06. Cleaning up" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 05. Deleting raw results" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${RESULT_PHENO_DIR}
+fi
+
+CHECK=`grep -c "Step 07. Finished!" ${JOURNAL_FILE}`
+if [ "${CHECK}" -lt "1" ]; then
+    echo "Step 06. Cleaning up" | tee -a ${JOURNAL_FILE}
+
+    rm -rf ${WORK_DIR}
+fi
+
+echo "Step 07. Finished!" | tee -a ${JOURNAL_FILE}

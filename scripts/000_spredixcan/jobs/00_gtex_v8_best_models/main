@@ -1,0 +1,10 @@
+export MODELS_DIR="/gpfs/data/im-lab/nas40t2/abarbeira/projects/gtex_v8/models_v1/eqtl/mashr"
+
+rm -rf ${METAXCAN_GTEX_V8_MODELS_DIR}
+mkdir -p ${METAXCAN_GTEX_V8_MODELS_DIR}
+cp -r ${MODELS_DIR}/*.db ${METAXCAN_GTEX_V8_MODELS_DIR}
+
+rm -rf ${METAXCAN_GTEX_V8_COVARS_DIR}
+mkdir -p ${METAXCAN_GTEX_V8_COVARS_DIR}
+cp -r ${MODELS_DIR}/*.gz ${METAXCAN_GTEX_V8_COVARS_DIR}
+

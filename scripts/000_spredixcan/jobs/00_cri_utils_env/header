@@ -1,0 +1,4 @@
+#!/bin/bash
+#PBS -N 00_cri_utils_env
+#PBS -o _logs/
+#PBS -e _logs/

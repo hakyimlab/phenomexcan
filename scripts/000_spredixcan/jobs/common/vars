@@ -1,0 +1,40 @@
+
+export BASE_DIR="/scratch/mpividori"
+export TMP_DIR="${BASE_DIR}/tmp"
+export PERM_BASE_DIR="/gpfs/data/im-lab/nas40t2/miltondp/"
+export BASE_RESULTS_DIR="/gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/"
+
+export CONDA_PROFILE_FILE="/gpfs/data/im-lab/nas40t2/miltondp/software/miniconda3/etc/profile.d/conda.sh"
+export CONDA_ENV_DIR="${PERM_BASE_DIR}/software/envs"
+export CONDA_ENV_METAXCAN="${CONDA_ENV_DIR}/metaxcan"
+export CONDA_ENV_CRI_UTILS="${CONDA_ENV_DIR}/cri_utils"
+
+export GWAS_DIR="${BASE_DIR}/gwas"
+
+export METAXCAN_DIR="${BASE_DIR}/metaxcan"
+export METAXCAN_RESULTS_DIR="${BASE_RESULTS_DIR}/spredixcan_gtex_v8_on_neale2018/spredixcan_mashr"
+export METAXCAN_GTEX_V8_DIR="${BASE_DIR}/gtex_v8/mashr"
+export METAXCAN_GTEX_V8_MODELS_DIR="${METAXCAN_GTEX_V8_DIR}/models"
+export METAXCAN_GTEX_V8_COVARS_DIR="${METAXCAN_GTEX_V8_DIR}/covariances"
+
+# this is for elastic net models only
+#export METAXCAN_RUN_SNP_COLUMN="rsid"
+#export METAXCAN_RUN_EXTRA_OPTIONS=""
+#export METAXCAN_GTEX_V8_REGEX='en_(?P<tissue>.+)\.db'
+
+# this is for best models (dapgw, mashr, etc)
+export METAXCAN_GTEX_V8_FILES_PREFIX="mashr_"
+export METAXCAN_GTEX_V8_REGEX='mashr_(?P<tissue>.+)\.db'
+export METAXCAN_RUN_SNP_COLUMN="panel_variant_id"
+export METAXCAN_RUN_EXTRA_OPTIONS="--keep_non_rsid --additional_output --model_db_snp_key varID"
+
+export VARIANTS_FILE="${BASE_DIR}/variants.tsv"
+export VARIANTS_GZ_FILE="${BASE_DIR}/variants.tsv.gz"
+export VARIANTS_THIN_FILE="${BASE_DIR}/variants_thin.tsv"
+export VARIANTS_THIN_GTEXID_FILE="${BASE_DIR}/variants_thin_with_gtexid.tsv"
+export VARIANTS_THIN2_FILE="${BASE_DIR}/variants_thin2.tsv"
+
+# source code and scripts
+export SCRIPTS_MATCH_SNPS_WITH_GTEXID="/gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/code/match_snps_with_gtex.py"
+export MATCHED_SNPS_WITH_GTEXID_FILE="/gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/snps_matched.txt.gz"
+
