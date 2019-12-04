@@ -13,3 +13,7 @@ https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh
 ```
 which is the one that works on CRI.
 
+# Execution
+
+The script `setup.sh` will run the jobs needed to prepare the environment. After those jobs
+finish successfully, you can run the `main.sh` script to generate the jobs for each GWAS.
