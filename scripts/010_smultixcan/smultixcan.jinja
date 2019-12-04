@@ -1,0 +1,39 @@
+#!/bin/bash
+#PBS -N {{job_name}}
+#PBS -S /bin/bash
+#PBS -l walltime={{job_walltime}}
+#PBS -l mem={{job_memory}}
+#PBS -l nodes=1:ppn={{ n_cpu }}
+
+#PBS -o {{logs_folder}}/{% raw %}${PBS_JOBNAME}.o${PBS_JOBID}.log{% endraw %}
+#PBS -e {{logs_folder}}/{% raw %}${PBS_JOBNAME}.e${PBS_JOBID}.err{% endraw %}
+
+module load gcc/6.2.0
+module load python/2.7.13
+
+{% raw %}cd $PBS_O_WORKDIR {% endraw %}
+
+export MKL_NUM_THREADS={{ n_cpu }}
+export OPEN_BLAS_NUM_THREADS={{ n_cpu }}
+export NUMEXPR_NUM_THREADS={{ n_cpu }}
+export OMP_NUM_THREADS={{ n_cpu }}
+
+tar -xzvpf {{ tar }} -C .
+
+{{ command }} \
+{{ cleared_snps }} \
+{{ models_folder }} \
+{{ models_name_pattern }} \
+{{ snp_covariance }} \
+{{ extra }} \
+{{ metaxcan_folder }} \
+{{ metaxcan_filter }} \
+{{ metaxcan_file_name_parse_pattern }} \
+{{ gwas_file }} \
+{{ __unnamed }} \
+{% if cutoff_trace_ratio %}{{ cutoff_trace_ratio }} \{% elif cutoff_threshold %}{{ cutoff_threshold }} \{% elif cutoff_eigen_ratio %}{{ cutoff_eigen_ratio }} \{% elif cutoff_condition_number %}{{ cutoff_condition_number }} \{% endif %}
+{% if verbosity %}{{ verbosity }} \{% endif %}
+--throw \
+{{ output }}
+
+printf "done\n"

@@ -1,0 +1,91 @@
+---
+definitions:
+  command: "python /gpfs/data/im-lab/nas40t2/abarbeira/software/MetaXcan/software/SMulTiXcan.py"
+
+  template: smultixcan.jinja
+  default_arguments:
+    job_memory: "4gb"
+    job_walltime: "06:00:00"
+    logs_folder: logs_sm
+    n_cpu: 1
+
+  submission:
+    !PBSQueue
+      jobs_folder: jobs_sm
+      job_name_key: job_name
+      fake_submission: true
+
+  constants:
+    metaxcan_results_folder: &METAXCAN_FOLDER /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/spredixcan_gtex_v8_on_neale2018/spredixcan_mashr/
+    metaxcan_file_name_pattern: &METAXCAN_FILE_NAME_PARSE_PATTERN '"(.*)-gtex_v8-(.*)-2018_10.csv"'
+    metaxcan_filter_pattern: &METAXCAN_FILTER_PATTERN '"{trait}-gtex_v8-(.*)-2018_10.csv"'
+
+    models_folder: &MODELS_FOLDER /gpfs/data/im-lab/nas40t2/abarbeira/projects/gtex_v8/models_v1/eqtl/mashr
+    models_name_pattern: &MODELS_NAME_PATTERN '"mashr_(.*).db"'
+    snp_list: &SNP_LIST /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/snps_intersection-varid-gtex_v8_mashr_and_ukb_neale2018.txt
+
+    snp_covariance: &SNP_COVARIANCE /gpfs/data/im-lab/nas40t2/abarbeira/projects/gtex_v8/models_v1/eqtl/meta_covariance/gtex_v8_expression_mashr_snp_covariance.txt.gz
+    cutoff_condition_number: &CUTOFF_CONDITION_NUMBER "30"
+
+    results_folder: &RESULTS_FOLDER results/sm
+  #Kind of ugly kink... need to add support for configurable inline template to pick up from configuration, to avoid duplicating "results"
+  pre_command:
+  - '[ -d results/sm ] || mkdir -p results/sm'
+
+arguments:
+  - !FilesInFolder
+    name: tar
+    sort: true
+    folder: *METAXCAN_FOLDER
+    regexp_filter: "(.*)-gtex_v8-2018_10.tar.gz"
+    metadata_rules: [ !ExtractFromFileNameRegexpMetadata { path: trait } ]
+
+#- !Whitelist { list_from_file: *WHITELIST, in_metadata_path: "trait" }
+
+  - !Scalar { name: cleared_snps, prefix: "--cleared_snps", value: *SNP_LIST }
+
+  - !Scalar { name: models_folder, prefix: "--models_folder", value: *MODELS_FOLDER }
+
+  - !Scalar { name: models_name_pattern, prefix: --models_name_pattern, value: *MODELS_NAME_PATTERN }
+
+  - !Scalar { name: snp_covariance, prefix: "--snp_covariance", value: *SNP_COVARIANCE }
+
+  - !Scalar { name: metaxcan_file_name_parse_pattern, prefix: "--metaxcan_file_name_parse_pattern", value: *METAXCAN_FILE_NAME_PARSE_PATTERN }
+
+  - !Scalar { name: cutoff_condition_number, prefix: "--cutoff_condition_number", value: *CUTOFF_CONDITION_NUMBER,
+    metadata_rules: [ !SaveValueInMetadata { path: run/condition_number } ]
+   }
+
+#  - !Scalar {name: extra, value: "--keep_non_rsid --additional_output --model_db_snp_key varID"}
+  - !Scalar {name: extra, value: "--keep_non_rsid --model_db_snp_key varID"}
+
+  - !ArgumentFromMetadata { name: trait, format_rule: "{trait}", sources: [ {path: trait, destination: trait} ] }
+
+  - !ArgumentFromMetadata
+    name: metaxcan_filter
+    prefix: "--metaxcan_filter"
+    format_rule: *METAXCAN_FILTER_PATTERN
+    sources: [ {path: trait, destination: trait} ]
+
+  - !ArgumentFromMetadata
+    name: metaxcan_folder
+    prefix: "--metaxcan_folder"
+    format_rule: "{trait}"
+    sources: [ {path: trait, destination: trait} ]
+
+  - !Scalar { name: verbosity, prefix: "--verbosity", value: "7" }
+
+  #TODO: metadata rule that stores value, so that we pick the condition number
+  - !ArgumentFromMetadata
+    name: output
+    prefix: "--output"
+    prepend: *RESULTS_FOLDER
+    format_rule: "smultixcan_{trait}_ccn{condition_number}.txt"
+    sources: [ {path: trait, destination: trait},
+               {path: run/condition_number, destination: condition_number }]
+
+  - !ArgumentFromMetadata
+    name: "job_name"
+    format_rule: "smultixcan_{trait}_ccn{condition_number}"
+    sources: [ {path: trait, destination: trait},
+               {path: run/condition_number, destination: condition_number }]
