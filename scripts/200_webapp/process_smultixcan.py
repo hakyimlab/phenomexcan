@@ -14,19 +14,20 @@ parser.add_argument('--fastenloc-h5-file', required=True, type=str)
 parser.add_argument('--spredixcan-most_signif-dir-effect-h5-file', required=True, type=str)
 parser.add_argument('--spredixcan-consensus-dir-effect-h5-file', required=True, type=str)
 parser.add_argument('--phenotypes-info-file', required=True, type=str)
-parser.add_argument('--gene-mappings-file', required=True, type=str)
+parser.add_argument('--genes-info-file', required=True, type=str)
 parser.add_argument('--no-header', required=False, action='store_true')
 args = parser.parse_args()
 
 
 # pheno info
 pheno_info = pd.read_csv(args.phenotypes_info_file, sep='\t')
-pheno_id_to_unique_desc = pheno_info[['short_code', 'unique_description']].set_index('short_code').to_dict()['unique_description']
-pheno_id_to_full_code = pheno_info[['short_code', 'full_code']].set_index('short_code').to_dict()['full_code']
-pheno_id_to_source = pheno_info[['short_code', 'source']].set_index('short_code').to_dict()['source']
+pheno_code_to_id = pheno_info[['short_code', 'pheno_id']].set_index('short_code').to_dict()['pheno_id']
+pheno_code_to_unique_desc = pheno_info[['short_code', 'unique_description']].set_index('short_code').to_dict()['unique_description']
+pheno_code_to_full_code = pheno_info[['short_code', 'full_code']].set_index('short_code').to_dict()['full_code']
+pheno_code_to_source = pheno_info[['short_code', 'source']].set_index('short_code').to_dict()['source']
 
 # gene mappings
-gene_mappings = pd.read_csv(args.gene_mappings_file, sep='\t')
+gene_mappings = pd.read_csv(args.genes_info_file, sep='\t')
 gene_to_band = gene_mappings[['gene', 'band']].set_index('gene').to_dict()['band']
 gene_to_gene_id = gene_mappings[['gene', 'gene_id']].set_index('gene').to_dict()['gene_id']
 
@@ -50,18 +51,20 @@ if match is not None and 'code' in match.groupdict().keys():
 else:
     raise ValueError('Regex did not match or no "code" named group found.')
 
-pheno_desc = pheno_id_to_unique_desc[pheno_code]
-pheno_full_code = pheno_id_to_full_code[pheno_code]
-pheno_source = pheno_id_to_source[pheno_code]
+pheno_id = pheno_code_to_id[pheno_code]
+pheno_desc = pheno_code_to_unique_desc[pheno_code]
+pheno_full_code = pheno_code_to_full_code[pheno_code]
+pheno_source = pheno_code_to_source[pheno_code]
 
-smultixcan_data = smultixcan_data.assign(pheno_desc=pheno_desc)
-smultixcan_data = smultixcan_data.assign(pheno_full_code=pheno_full_code)
-smultixcan_data = smultixcan_data.assign(pheno_source=pheno_source)
+smultixcan_data = smultixcan_data.assign(pheno_id=pheno_id)
+# smultixcan_data = smultixcan_data.assign(pheno_desc=pheno_desc)
+# smultixcan_data = smultixcan_data.assign(pheno_full_code=pheno_full_code)
+# smultixcan_data = smultixcan_data.assign(pheno_source=pheno_source)
 
 # add gene_id column
 smultixcan_data = pd.merge(
     smultixcan_data.set_index('gene'),
-    gene_mappings[['gene_id', 'gene', 'band']].set_index('gene'),
+    gene_mappings[['gene', 'gene_id', 'gene_num_id']].set_index('gene'),
     left_index=True,
     right_index=True,
     how='left',
@@ -82,14 +85,11 @@ consensus_direction_effect = consensus_direction_effect.astype('category').cat.r
 smultixcan_data = smultixcan_data.assign(dir_effect_consensus=consensus_direction_effect)
 
 # reorder columns
-smultixcan_data = smultixcan_data.set_index('gene')
+smultixcan_data = smultixcan_data.set_index(['pheno_id', 'gene_num_id']).sort_index()
 smultixcan_data = smultixcan_data[[
-    'gene_name', 'band',
-    'pheno_desc', 'pheno_source', # 'pheno_full_code'
     'pvalue',
     'dir_effect_most_signif', 'dir_effect_consensus',
     'n', 'n_indep',
-    'p_i_best', 't_i_best',
     'rcp',
 ]]
 

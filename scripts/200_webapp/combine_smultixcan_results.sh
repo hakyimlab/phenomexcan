@@ -10,7 +10,7 @@ python ${SCRIPT_DIR}/process_smultixcan.py \
   --spredixcan-most_signif-dir-effect-h5-file /mnt/phenomexcan_base/gene_assoc/spredixcan-mashr-effect_direction-most_signif.h5 \
   --spredixcan-consensus-dir-effect-h5-file /mnt/phenomexcan_base/gene_assoc/spredixcan-mashr-effect_direction-consensus.h5 \
   --phenotypes-info-file /mnt/phenomexcan_base/deliverables/phenotypes_info.tsv.gz \
-  --gene-mappings-file /mnt/phenomexcan_base/deliverables/genes_info.tsv.gz
+  --genes-info-file /mnt/phenomexcan_base/deliverables/genes_info.tsv.gz
 EOM
 
 export SMULTIXCAN_RESULTS_DIR_00="/mnt/phenomexcan_base/results/smultixcan/rapid_gwas_project"
@@ -36,7 +36,5 @@ echo "Adding header"
 parallel -j1 "${COMMAND} --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | head -1 > ${OUTPUT_FILE}" ::: `ls ${SMULTIXCAN_RESULTS_DIR_00}/* | head -1`
 
 echo "Adding data"
-parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" ::: ${SMULTIXCAN_RESULTS_DIR_00}/*
-
-parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_01}' | sem --fg --id l 'cat'  >> ${OUTPUT_FILE}" ::: ${SMULTIXCAN_RESULTS_DIR_01}/*
-
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_00}'" >> ${OUTPUT_FILE} ::: ${SMULTIXCAN_RESULTS_DIR_00}/*
+parallel -j${N_JOBS} "${COMMAND} --no-header --smultixcan-file-pattern '${SMULTIXCAN_PATTERN_01}'" >> ${OUTPUT_FILE} ::: ${SMULTIXCAN_RESULTS_DIR_01}/*
