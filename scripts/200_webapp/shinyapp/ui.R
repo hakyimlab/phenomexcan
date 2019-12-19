@@ -26,6 +26,7 @@ build_ui <- function() {
     fluidRow(
       column(4, selectInput( "display", "Result set:",
                                     c(PhenomeXcan = 'results',
+                                      PhenomeXcan_SingleTissue = 'results_singletissue',
                                       PhenomeXcan_Clinvar = 'pairs'))),
       column(8, div(""))
     ),
@@ -33,7 +34,7 @@ build_ui <- function() {
       condition = "input.display == 'results'",
       fluidRow(
         column(1, checkboxInput("ordered", label = "Order by p-value", value = TRUE)),
-        column(1, numericInput("pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 1, step = 0.001),
+        column(1, numericInput("pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 0.05, step = 0.001),
         column(1, numericInput("rthreshold", "rcp thres.:", 0, width = 200), min = 0, max = 1, step = 0.001),
         column(1, div()),
         column(1, numericInput("limit", "Record limit:", 100), min = 1),
@@ -63,14 +64,54 @@ build_ui <- function() {
       ) #,
     ),
     conditionalPanel(
+      condition = "input.display == 'results_singletissue'",
+      fluidRow(
+        column(1, checkboxInput("sp_ordered", label = "Order by p-value", value = TRUE)),
+        column(1, numericInput("sp_pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 0.05, step = 0.001),
+        column(1, div()),
+        column(1, numericInput("sp_limit", "Record limit:", 100), min = 1),
+        column(7, div(""))
+      ),
+      fluidRow(
+        column(4, selectizeInput(inputId = "sp_pheno",
+                                 label = "Filter by phenotype(s):",
+                                 choices = NULL,
+                                 selected = NULL,
+                                 multiple = TRUE,
+                                 width = 650,
+                                 # list of options for selectize.js available at: github.com/selectize/selectize.js/blob/master/docs/usage.md
+                                 options = list(closeAfterSelect = FALSE, openOnFocus = TRUE, loadThrottle = NULL))),
+        column(5, selectizeInput(inputId = "sp_tissue",
+                                 label = "Filter by tissue(s):",
+                                 choices = NULL,
+                                 selected = NULL,
+                                 multiple = TRUE,
+                                 width = 650,
+                                 # list of options for selectize.js available at: github.com/selectize/selectize.js/blob/master/docs/usage.md
+                                 options = list(closeAfterSelect = FALSE, openOnFocus = TRUE, loadThrottle = NULL))),
+        column(2, selectizeInput(inputId = "sp_gene_name",
+                                 label = "Filter by gene(s):",
+                                 choices = NULL,
+                                 selected = NULL,
+                                 multiple = TRUE,
+                                 # list of options for selectize.js available at: github.com/selectize/selectize.js/blob/master/docs/usage.md
+                                 options = list(closeAfterSelect = FALSE, openOnFocus = TRUE, loadThrottle = NULL))),
+        column(6, div(""))
+      ),
+      uiOutput("loading_sp_results"),
+      fluidRow(
+        DT::dataTableOutput(outputId="sp_results")
+      ) #,
+    ),
+    conditionalPanel(
       condition = "input.display == 'pairs'",
       fluidRow(
-        column(4, checkboxInput("ordered", label = "Order by score", value = TRUE)),
-        column(1, numericInput("limit", "Record limit:", 100), min = 1),
+        column(4, checkboxInput("uc_ordered", label = "Order by z-score", value = TRUE)),
+        column(1, numericInput("uc_limit", "Record limit:", 100), min = 1),
         column(8)
       ),
       fluidRow(
-        column(4, selectizeInput(inputId = "ukb_trait",
+        column(4, selectizeInput(inputId = "uc_ukb_trait",
                                  label = "Filter by UKB trait(s):",
                                  choices = NULL,
                                  selected = NULL,
@@ -78,7 +119,7 @@ build_ui <- function() {
                                  multiple = TRUE,
                                  # list of options for selectize.js available at: github.com/selectize/selectize.js/blob/master/docs/usage.md
                                  options = list(closeAfterSelect = FALSE, openOnFocus = TRUE, loadThrottle = NULL))),
-        column(4, selectizeInput(inputId = "clinvar_trait",
+        column(4, selectizeInput(inputId = "uc_clinvar_trait",
                                  label = "Filter by CLINVAR trait(s):",
                                  choices = NULL,
                                  selected = NULL,

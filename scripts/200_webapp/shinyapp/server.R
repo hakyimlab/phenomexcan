@@ -17,7 +17,7 @@ render_results <- function(data) {
       pageLength = 20,
       lengthMenu = c(10, 20, 40, 100),
       columnDefs = list(
-        list(className = "dt-center", targets = c(8, 9))
+        list(className = "dt-center", targets = c(7, 8))
       )
     ),
     selection = 'single')
@@ -25,8 +25,28 @@ render_results <- function(data) {
   if (nrow(data)>0) {
     render <- render %>%
       DT::formatSignif('pvalue', 3) %>%
-      DT::formatSignif('rcp', 3) %>%
-      DT::formatSignif('best_tissue_p', 3)
+      DT::formatSignif('rcp', 3) #%>%
+      # DT::formatSignif('best_tissue_p', 3)
+  }
+  render
+}
+
+render_sp_results <- function(data) {
+  render <- DT::datatable(data,
+    class = 'compact display',
+    options = list(
+      pageLength = 20,
+      lengthMenu = c(10, 20, 40, 100),
+      columnDefs = list(
+        list(className = "dt-center", targets = c(7, 8))
+      )
+    ),
+    selection = 'single')
+
+  if (nrow(data)>0) {
+    render <- render %>%
+      DT::formatSignif('pvalue', 3) #%>%
+      # DT::formatSignif('best_tissue_p', 3)
   }
   render
 }
@@ -42,12 +62,12 @@ render_pairs <- function(data) {
   
   if (nrow(data)>0) {
     render <- render %>%
-      DT::formatSignif('zscore', 4) %>%
-      DT::formatStyle("gene_names",
-                whiteSpace="nowrap",
-                overflow="hidden",
-                textOverflow= "ellipsis",
-                maxWidth= "20ch")
+      DT::formatSignif('zscore', 4) #%>%
+      # DT::formatStyle("gene_names",
+      #           whiteSpace="nowrap",
+      #           overflow="hidden",
+      #           textOverflow= "ellipsis",
+      #           maxWidth= "20ch")
   }
   render
 }
@@ -99,9 +119,12 @@ selected_data_from_table <- function(event, data) {
 
 server <- function(input, output, session) {
     updateSelectizeInput(session = session, inputId = 'gene_name', choices = c(genes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'sp_gene_name', choices = c(genes_), server = TRUE)
     updateSelectizeInput(session = session, inputId = 'pheno', choices = c(phenotypes_), server = TRUE)
-    updateSelectizeInput(session = session, inputId = 'ukb_trait', choices = c(ukb_phenotypes_), server = TRUE)
-    updateSelectizeInput(session = session, inputId = 'clinvar_trait', choices = c(clinvar_phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'sp_pheno', choices = c(phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'sp_tissue', choices = c(tissues_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'uc_ukb_trait', choices = c(phenotypes_), server = TRUE)
+    updateSelectizeInput(session = session, inputId = 'uc_clinvar_trait', choices = c(clinvar_phenotypes_), server = TRUE)
   
     sm_data <- data.frame()
     
@@ -118,6 +141,12 @@ server <- function(input, output, session) {
       render_results(l)
     })
 
+    output$sp_results = DT::renderDataTable({
+      l <- get_sp_results_from_data_db(input)
+      sp_data <<- l
+      render_sp_results(l)
+    })
+
     output$sm_pairs = DT::renderDataTable({
       l <- get_pairs_from_data_db(input)
       pairs_data <<- l
@@ -127,6 +156,8 @@ server <- function(input, output, session) {
     ###########################################################################
     #Loading indicators
     output$loading_results <- renderUI(loading_indicator("sm_results_loading"))
+
+    output$loading_sp_results <- renderUI(loading_indicator("sp_results_loading"))
     
     output$loading_pairs <- renderUI(loading_indicator("sm_pairs_loading"))
     
@@ -149,6 +180,12 @@ server <- function(input, output, session) {
     #event name is conventional from table name
     observeEvent(
       input$sm_results_rows_selected,{
+        LOG("selected results rows")
+        #shinyjs::runjs("$('#myModal').modal()")
+      })
+
+    observeEvent(
+      input$sp_results_rows_selected,{
         LOG("selected results rows")
         #shinyjs::runjs("$('#myModal').modal()")
       })
