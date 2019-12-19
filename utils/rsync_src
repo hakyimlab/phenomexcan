@@ -1,4 +1,9 @@
 #!/bin/bash
 
-rsync -avzh ./src/ ~/spark08/phenomexcan/github_phenomexcan/src/
+if [ -z "${1}" ]; then
+    echo "Provide folder"
+    exit 1
+fi
+
+rsync -avzh ./${1} ~/spark08/phenomexcan/github_phenomexcan/${1}
 
