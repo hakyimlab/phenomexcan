@@ -22,12 +22,6 @@ PhenomeXcan can be accessed in several ways:
 The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with all the gene associations across 4,091 traits that are Bonferroni significant (p < 5.5e-10) and have an RCP > 0.1. You can also obtain this result by combining the two matrices mentioned above: `smultixcan-mashr-pvalues.tsv.gz` and `fastenloc-torus-rcp.tsv.gz`.
 
 
-# Code
+# Setup and manuscript content
 
-Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki).
-
-# Manuscript content
-
-Coming soon.
-
-## Figures
+Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki) for instructions to run everything from scratch, postprocessing steps and manuscript content generation.
