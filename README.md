@@ -24,7 +24,7 @@ The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with
 
 # Code
 
-Coming soon.
+Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki/Installation-and-code).
 
 ## Conda environment
 
