@@ -24,7 +24,7 @@ The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with
 
 # Code
 
-Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki/Installation-and-code).
+Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki).
 
 # Manuscript content
 
