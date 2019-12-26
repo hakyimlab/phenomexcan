@@ -26,14 +26,6 @@ The Supplementary Material of the bioRxiv manuscript contains a spreadsheet with
 
 Check the [wiki](https://github.com/hakyimlab/phenomexcan/wiki/Installation-and-code).
 
-## Conda environment
-
-Create a new Conda environment with this command:
-```
-$ conda env create -n YOUR_CONDA_ENV_NAME -p env/environment.yml
-$ conda activate YOUR_CONDA_ENV_NAME
-```
-
 # Manuscript content
 
 Coming soon.
