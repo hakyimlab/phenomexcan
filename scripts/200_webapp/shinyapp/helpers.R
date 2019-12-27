@@ -85,10 +85,10 @@ AND sm.pvalue < {input$pthreshold}")
 AND sm.rcp > {input$rthreshold}")
   }
   
-  if (input$ordered){
+#  if (input$ordered){
     CLAUSE <- CLAUSE %>% glue::glue("
 ORDER BY sm.pvalue");
-  }
+#  }
   
   l = 100
   if (input$limit > 1) {
@@ -140,10 +140,10 @@ AND g.gene_name IN {gene_name_list}", gene_name_list=to_sql_list(input$sp_gene_n
 AND sp.pvalue < {input$sp_pthreshold}")
   }
 
-  if (input$sp_ordered){
+#  if (input$sp_ordered){
     CLAUSE <- CLAUSE %>% glue::glue("
 ORDER BY sp.pvalue");
-  }
+#  }
 
   l = 100
   if (input$sp_limit > 1) {
@@ -182,10 +182,10 @@ AND p.unique_description IN {trait_list}" %>% glue::glue(trait_list=to_sql_list(
 AND cp.description IN {trait_list}" %>% glue::glue(trait_list=to_sql_list(input$uc_clinvar_trait)))
   }
   
-  if (input$uc_ordered){
+#  if (input$uc_ordered){
     CLAUSE <- paste0(CLAUSE, "\n
 ORDER BY uc.sqrt_z2_avg DESC");
-  }
+#  }
   
   l = 100
   if (input$uc_limit > 1) {

@@ -33,8 +33,8 @@ build_ui <- function() {
     conditionalPanel(
       condition = "input.display == 'results'",
       fluidRow(
-        column(1, checkboxInput("ordered", label = "Order by p-value", value = TRUE)),
-        column(1, numericInput("pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 0.05, step = 0.001),
+        #column(1, checkboxInput("ordered", label = "Order by p-value", value = TRUE)),
+        column(1, numericInput("pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 1, step = 0.001),
         column(1, numericInput("rthreshold", "rcp thres.:", 0, width = 200), min = 0, max = 1, step = 0.001),
         column(1, div()),
         column(1, numericInput("limit", "Record limit:", 100), min = 1),
@@ -66,8 +66,8 @@ build_ui <- function() {
     conditionalPanel(
       condition = "input.display == 'results_singletissue'",
       fluidRow(
-        column(1, checkboxInput("sp_ordered", label = "Order by p-value", value = TRUE)),
-        column(1, numericInput("sp_pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 0.05, step = 0.001),
+        #column(1, checkboxInput("sp_ordered", label = "Order by p-value", value = TRUE)),
+        column(1, numericInput("sp_pthreshold", "P-value thres.:", 0.05, width = 200), min = 0, max = 1, step = 0.001),
         column(1, div()),
         column(1, numericInput("sp_limit", "Record limit:", 100), min = 1),
         column(7, div(""))
@@ -106,7 +106,7 @@ build_ui <- function() {
     conditionalPanel(
       condition = "input.display == 'pairs'",
       fluidRow(
-        column(4, checkboxInput("uc_ordered", label = "Order by z-score", value = TRUE)),
+        #column(4, checkboxInput("uc_ordered", label = "Order by z-score", value = TRUE)),
         column(1, numericInput("uc_limit", "Record limit:", 100), min = 1),
         column(8)
       ),
