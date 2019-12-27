@@ -11,6 +11,5 @@ create table ukb_clinvar (
 \copy ukb_clinvar from /mnt/phenomexcan_base/gene_assoc/ukb_clinvar.tsv with delimiter as E'\t' csv header;
 
 CREATE INDEX uc_sqrt_z2_avg_idx ON ukb_clinvar (sqrt_z2_avg DESC);
-CREATE INDEX uc_ukb_trait_z2_idx ON ukb_clinvar (ukb_pheno_id, sqrt_z2_avg DESC);
-CREATE INDEX uc_clinvar_trait_z2_idx ON ukb_clinvar (clinvar_pheno_id, sqrt_z2_avg DESC);
-CREATE INDEX uc_ukb_trait_clinvar_trait_z2_idx ON ukb_clinvar (ukb_pheno_id, clinvar_pheno_id, sqrt_z2_avg DESC);
+CREATE INDEX uc_clinvar_pheno_id_idx ON ukb_clinvar (clinvar_pheno_id);
+CREATE INDEX uc_ukb_pheno_id_clinvar_pheno_id_sqrt_z2_avg_idx ON ukb_clinvar (ukb_pheno_id, clinvar_pheno_id, sqrt_z2_avg DESC);
