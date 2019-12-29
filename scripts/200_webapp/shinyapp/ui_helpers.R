@@ -1,5 +1,5 @@
 appTitle_ <- "PhenomeXcan"
-releaseDate_ <- "Release date: December 4, 2019."
+releaseDate_ <- "Release date: December 28, 2019."
 
 alertMessage_ <- ""  # Write an alert message here
 
@@ -32,7 +32,8 @@ dataInfo <- function(){
 modelsInfo <- function(){
     h1 <- h3("Documentation")
     d1 <- div(
-        p("Select the 'Result set' from 'PhenomeXcan' (4,091 traits and 22,255 gene associations) and 'PhenomeXcan_ClinVar'
+        p("Select the 'Result set' from 'PhenomeXcan' (4,091 traits and 22,255 gene associations), 'PhenomeXcan_SingleTissue'
+        (4,091 traits, 49 tissues and 22,255 gene associations) and 'PhenomeXcan_ClinVar'
         (integration with 5,104 ClinVar traits). A p-value displayed as 0 is one to small for available numerical resolution."),
     )
     h2 <- h4("PhenomeXcan")
@@ -47,17 +48,23 @@ modelsInfo <- function(){
         consensus_sign (contains the sign of effect of the consensus among those tissues with pvalue < 1e-4; '+' and '-' mean
         the same as in the best_sign column);
         n_tissues (number of tissues available to S-MultiXcan when computing
-        significance for a gene); n_indep (number of independent components of variations among n_tissues);
-        best_ (single tissue S-PrediXcan stats)")
+        significance for a gene); n_indep (number of independent components of variations among n_tissues)")
     )
-    h3 <- h4("PhenomeXcan_ClinVar")
+    h3 <- h4("PhenomeXcan_SingleTissue")
     d3 <- div(
+        p("Columns meaning:
+        pvalue (p-value from S-PrediXcan);
+        zscore (zscore from S-PrediXcan);
+        effect_size (effect size from S-PrediXcan)")
+    )
+    h4 <- h4("PhenomeXcan_ClinVar")
+    d4 <- div(
         p("Columns meaning: zscore (this value is the average squared z-score from S-MultiXcan considering the genes
         associated to the ClinVar trait; z-scores are truncated to 40); gene_names (genes name and band reported for
         the ClinVar trait).")
     )
     
-    dd <- div(h1, d1, h2, d2, h3, d3)
+    dd <- div(h1, d1, h2, d2, h3, d3, h4, d4)
     dd
 }
 
