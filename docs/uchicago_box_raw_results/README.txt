@@ -10,8 +10,13 @@ If you use this resource, please cite these two manuscripts:
    diseases and traits. bioRxiv, doi: https://doi.org/10.1101/814350
 
 
-The subfolder rapid_gwas_project contains all results for 4,049 traits from the
-Rapid GWAS Project (http://www.nealelab.is/uk-biobank), and the gtex_gwas
-subfolder contains 42 extra traits from the GTEx GWAS manuscript
+This folder contains the raw results for 4,091 traits from the Rapid GWAS
+Project (http://www.nealelab.is/uk-biobank) and the GTEX GWAS manuscript
 (https://doi.org/10.1101/814350).
+
+You can download the results for each individual phenotype. Take a look at the
+shared Google Drive Spreadsheet to get the phenotype information and download
+links:
+
+https://docs.google.com/spreadsheets/d/15KEYR_G2AOkPiLi9H68Kv8HcC0PJA5B-0LX_aIlx1x0/edit?usp=sharing
 
