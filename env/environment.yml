@@ -3,6 +3,7 @@ channels:
 dependencies:
   - ipython=7.6
   - jupyter=1.0.0
+  - jupyterlab=1.2
   - json5=0.8.5
   - matplotlib=3.1
   - numpy=1.16
@@ -21,8 +22,7 @@ dependencies:
   - postgresql=11.2
   - pytables=3.6
   - openpyxl=3.0
+  - tzlocal=2.0
   - wget=1.20
   - pip:
-    - jupyterlab==1.2.0       
-    - jupyterlab-server==1.0.6
     - papermill==1.2.1
