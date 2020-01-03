@@ -31,6 +31,10 @@ GTEX_GWAS_PHENO_INFO_FILE = join(DATA_DIR, 'gtex_gwas_phenotypes_metadata.tsv')
 # Clinvar
 CLINVAR_DATA_FILE = join(DATA_DIR, '2019-07-16-gene_condition_source_id')
 
+# OMIM silver standard
+OMIM_SILVER_STANDARD_BASE_DIR = join(RESULTS_DIR, 'omim_silver_standard')
+OMIM_SILVER_STANDARD_GWAS_TO_GENE_DIR = join(OMIM_SILVER_STANDARD_BASE_DIR, 'gwas2gene')
+
 # S-MultiXcan
 SMULTIXCAN_RESULTS_BASE_DIR = join(RESULTS_DIR, 'smultixcan')
 SMULTIXCAN_RESULTS_DIR = {

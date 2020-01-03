@@ -7,6 +7,19 @@ from metadata import \
 
 
 class Trait:
+    @staticmethod
+    def get_code_from_full_code(pheno_name):
+        pheno_split = pheno_name.split('-')
+
+        if len(pheno_split) == 1:
+            pheno_code = pheno_split[0]
+        elif len(pheno_split) == 2:
+            pheno_code = pheno_split[0]
+        else:
+            pheno_code = '-'.join(pheno_split[:2])
+
+        return pheno_code
+
     def _init_ukb_metadata(self):
         self.is_from_rapid_gwas_project = True
         pheno_data = RAPID_GWAS_PHENO_INFO.loc[self.code]
@@ -31,9 +44,16 @@ class Trait:
         self.n_cases = pheno_data['Cases']
         self.n_controls = self.n - self.n_cases
 
-    def __init__(self, code):
+    def __init__(self, code=None, full_code=None):
+        if code is None and full_code is None:
+            raise ValueError('Either code or full_code must be specified')
+
         self.is_from_rapid_gwas_project = False
-        self.code = code
+
+        if code is not None:
+            self.code = code
+        elif full_code is not None:
+            self.code = Trait.get_code_from_full_code(full_code)
 
         if self.code in RAPID_GWAS_PHENO_INFO.index:
             self._init_ukb_metadata()
