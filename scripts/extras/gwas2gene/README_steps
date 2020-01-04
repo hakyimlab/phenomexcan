@@ -1,0 +1,11 @@
+1. Download GWAS parsing results from Bionimbus S3 (only the ones we need):
+
+    $ parallel -j4 \
+        'aws s3 --endpoint-url https://bionimbus-objstore.opensciencedatacloud.org --profile bionimbus cp s3://uk-biobank.hakyimlab.org/projects/phenomexcan/gwas_parsing/{}.txt.gz .' \
+        < selected_ukb_traits_omim.txt
+
+    where 'selected_ukb_traits_omim.txt' is a list of UKB trait codes (with no header).
+
+
+2. See main.sh
+
