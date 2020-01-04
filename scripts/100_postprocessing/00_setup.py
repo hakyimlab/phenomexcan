@@ -2,9 +2,8 @@ import os
 import hashlib
 import argparse
 
-import pandas as pd
-
 import settings as conf
+from remote import download_raw_results
 
 
 def _check_md5(expected_md5, filepath):
@@ -70,46 +69,26 @@ def download_fastenloc_tissues():
     os.system(f'mv {output_file} {final_output_file}')
 
 
-def download_smultixcan_results_for_rapid_gwas_project():
-    output_file = os.path.join(conf.TMP_DIR, 'smultixcan_mashr.tar')
-    os.system(f'wget https://uchicago.box.com/shared/static/prq9o1vuwtba4ktfi1tm1hjqfiy8qvar.tar -O {output_file}')
-    _check_md5('6900f6da03d6b430f942a32ec41124ba', output_file)
-    os.system(f'tar -xf {output_file} -C {conf.TMP_DIR}')
-    os.system(f'mv {conf.TMP_DIR}/smultixcan/ {conf.SMULTIXCAN_RESULTS_DIR["RapidGWASProject"]}')
+def download_smultixcan_results():
+    download_raw_results(
+        conf.SMULTIXCAN_RESULTS_DIR,
+        'https://uchicago.box.com/shared/static/v72fmxm521dvtx238nsoghwadp89fmoa.xlsx',
+    )
 
 
-def download_smultixcan_results_for_gtex_gwas():
-    output_file = os.path.join(conf.TMP_DIR, 'gtex_gwas-42_traits-smultixcan.tar.gz')
-    os.system(f'wget https://uchicago.box.com/shared/static/qi8m6mdxdyss42ui6dsukpuemh107yfv.gz -O {output_file}')
-    _check_md5('2b1ade011506f87fe632ad56c6c99357', output_file)
-    os.system(f'tar -xf {output_file} -C {conf.TMP_DIR}')
-    os.system(f'mv {conf.TMP_DIR}/smultixcan/ {conf.SMULTIXCAN_RESULTS_DIR["GTEX_GWAS"]}')
+def download_spredixcan_results():
+    download_raw_results(
+        conf.SPREDIXCAN_RESULTS_DIR,
+        'https://uchicago.box.com/shared/static/b7i2ovtqern07joh7b4481tl10x558i6.xlsx',
+    )
 
 
-def download_fastenloc_results_for_rapid_gwas_project():
-    base_dir = os.path.join(conf.TMP_DIR, 'fastenloc')
-    os.makedirs(base_dir, exist_ok=True)
+def download_fastenloc_results():
+    download_raw_results(
+        conf.FASTENLOC_RESULTS_DIR,
+        'https://uchicago.box.com/shared/static/enwnyinsgcgs48y70qggo8iyuo0gfhct.xlsx',
+    )
 
-    file_list = os.path.join(base_dir, 'fastenloc_download_list')
-    os.system(f'wget https://uchicago.box.com/shared/static/vyk414lg2jzo00szehhxxyqwi6dxxsjz -O {file_list}')
-
-    md5_file = os.path.join(base_dir, 'MD5SUM.txt')
-    os.system(f'wget https://uchicago.box.com/shared/static/0ny0u72q5ir3nyw8sk84iwgkho8ak8qk.txt -O {md5_file}')
-    md5info = pd.read_csv(md5_file, header=None, sep='\s+', index_col=1, squeeze=True)
-
-    for row in pd.read_csv(file_list, header=None, sep='\s+').itertuples(index=False):
-        file_url = row[0]
-        file_name = row[1]
-
-        if 'MD5SUM' in file_name:
-            continue
-
-        file_name_path = os.path.join(base_dir, file_name)
-
-        print(f'Downloading: {file_name}')
-        os.system(f'wget {file_url} -O {file_name_path}')
-        _check_md5(md5info.loc[file_name], file_name_path)
-        print(f'  md5 checking ok')
 
 
 available_actions = {'all': None, }
