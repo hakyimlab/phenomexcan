@@ -20,6 +20,7 @@ def _create_directories():
     os.makedirs(conf.TMP_DIR, exist_ok=True)
     os.makedirs(conf.SMULTIXCAN_RESULTS_BASE_DIR, exist_ok=True)
     os.makedirs(conf.OMIM_SILVER_STANDARD_BASE_DIR, exist_ok=True)
+    os.makedirs(conf.MISC_RESULTS_BASE_DIR, exist_ok=True)
 
 
 def download_mashr_models():
@@ -35,6 +36,22 @@ def download_rapid_gwas_pheno_info():
     output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
     os.system(f'wget https://uchicago.box.com/shared/static/46gsi3lrrsw030uircn4fesjcrn4898q.gz -O {output_file}')
     _check_md5('cba910ee6f93eaed9d318edcd3f1ce18', output_file)
+    os.system(f'mv {output_file} {final_output_file}')
+
+
+def download_hpo_to_omim_and_phecode():
+    final_output_file = os.path.join(conf.DATA_DIR, 'hpo-to-omim-and-phecode.csv.gz')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/31u8dcmokowzddf98n6f98d8yg86yhdx.gz -O {output_file}')
+    _check_md5('85b25a9707897ef3cd16ab3bc8718398', output_file)
+    os.system(f'mv {output_file} {final_output_file}')
+
+
+def download_phewas_catalog():
+    final_output_file = os.path.join(conf.DATA_DIR, 'phewas-catalog.csv.gz')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/nde83340q6qxjtwlbidz5rzdp67o8c8u.gz -O {output_file}')
+    _check_md5('da863d9df86e95e624bcfe5683ee3ead', output_file)
     os.system(f'mv {output_file} {final_output_file}')
 
 
@@ -105,6 +122,15 @@ def download_fastenloc_results():
         conf.FASTENLOC_RESULTS_DIR,
         'https://uchicago.box.com/shared/static/enwnyinsgcgs48y70qggo8iyuo0gfhct.xlsx',
     )
+
+
+def download_enloc_selected_traits():
+    final_output_file = os.path.join(conf.MISC_RESULTS_BASE_DIR, 'enloc-selected_traits.tar.gz')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/i9ox9xeb0ajczssy275e311hmeu0xkhg.gz -O {output_file}')
+    os.system(f'echo "8909da0618eab99355b203a075c0c952 {output_file}" | md5sum -c')
+    os.system(f'mv {output_file} {final_output_file}')
+    os.system(f'tar -xf {final_output_file} -C {conf.MISC_RESULTS_BASE_DIR}')
 
 
 
