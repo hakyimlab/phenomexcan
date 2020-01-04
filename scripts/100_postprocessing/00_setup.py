@@ -19,6 +19,7 @@ def _create_directories():
     os.makedirs(conf.GTEX_DIR, exist_ok=True)
     os.makedirs(conf.TMP_DIR, exist_ok=True)
     os.makedirs(conf.SMULTIXCAN_RESULTS_BASE_DIR, exist_ok=True)
+    os.makedirs(conf.OMIM_SILVER_STANDARD_BASE_DIR, exist_ok=True)
 
 
 def download_mashr_models():
@@ -35,6 +36,22 @@ def download_rapid_gwas_pheno_info():
     os.system(f'wget https://uchicago.box.com/shared/static/46gsi3lrrsw030uircn4fesjcrn4898q.gz -O {output_file}')
     _check_md5('cba910ee6f93eaed9d318edcd3f1ce18', output_file)
     os.system(f'mv {output_file} {final_output_file}')
+
+
+def download_omim_standard():
+    final_output_file = os.path.join(conf.DATA_DIR, 'omim_silver_standard.tsv')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/1urk2apf8w1nq1qu6v4nmk152aad5qfe.tsv -O {output_file}')
+    _check_md5('5b2b4744359a46ec1453f07ed56d180f', output_file)
+    os.system(f'mv {output_file} {final_output_file}')
+
+
+def download_omim_standard_gwas2gene():
+    final_output_file = os.path.join(conf.RESULTS_DIR, 'gwas2gene.tar.gz')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/1s2i05u2um4idfnbkpx3qjbt2f35oky6.gz -O {output_file}')
+    _check_md5('ceeb0e72407afaf95409971b4721bf7e', output_file)
+    os.system(f'tar -C {conf.OMIM_SILVER_STANDARD_BASE_DIR} -xf {output_file}')
 
 
 def download_gtex_gwas_pheno_info():
