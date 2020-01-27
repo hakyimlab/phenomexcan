@@ -1,12 +1,13 @@
 import tempfile
+from multiprocessing import cpu_count
 from os.path import join
 
 # General settings
-N_JOBS = 4
-N_JOBS_HIGH = 20 # for low-computational tasks
+N_JOBS = int(cpu_count() / 2)
+N_JOBS_HIGH = cpu_count()  # for low-computational tasks (IO, etc)
 
 # Main folders
-BASE_DIR = '/mnt/phenomexcan_base/'
+BASE_DIR = '/mnt/phenomexcan/'
 
 TMP_DIR = join(tempfile.gettempdir(), 'phenomexcan')
 DATA_DIR = join(BASE_DIR, 'data')
