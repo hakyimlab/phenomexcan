@@ -17,15 +17,18 @@ export OPEN_BLAS_NUM_THREADS={{ n_cpu }}
 export NUMEXPR_NUM_THREADS={{ n_cpu }}
 export OMP_NUM_THREADS={{ n_cpu }}
 
+mkdir -p "$(dirname {{ prefix }})"
+
 {{ command }} \
 {{ gtex_eqtl }} \
--g {{ pip }} \
+-gwas {{ pip }} \
 {{ tissue_param }} \
 -prefix {{ prefix }}
 
-rm {{ prefix }}.enloc.snp.out
+#rm {{ prefix }}.enloc.snp.out
 
-echo "Compressing"
-gzip {{ prefix }}.enloc.sig.out
+#echo "Compressing"
+#gzip {{ prefix }}.enloc.sig.out
 
 printf "done\n"
+

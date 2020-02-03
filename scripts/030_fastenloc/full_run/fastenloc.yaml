@@ -16,7 +16,7 @@ definitions:
       fake_submission: true
 
   constants:
-    torus_results_folder: &TORUS_RESULTS_FOLDER /scratch/mpividori/torus/
+    torus_results_folder: &TORUS_RESULTS_FOLDER /scratch/mpividori/torus/rapid_gwas_project/
     gtex_eqtl_annot_file: &GTEX_EQTL_ANNOT_FILE /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/gtex_v8.eqtl_annot.vcf.gz
     gtex_eqtl_tissues_file: &GTEX_EQTL_TISSUES_FILE /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/gtex_v8.eqtl_annot.tissues.txt
 
@@ -30,17 +30,17 @@ arguments:
     name: pip
     sort: true
     folder: *TORUS_RESULTS_FOLDER
-    regexp_filter: "(.*).gwas.imputed_v3.both_sexes.tsv.gz.pip.gz"
+    regexp_filter: "torus-(.*).pip.gz"
     metadata_rules: [ !ExtractFromFileNameRegexpMetadata { path: trait } ]
 
-  - !Scalar { name: gtex_eqtl, prefix: "-e", value: *GTEX_EQTL_ANNOT_FILE }
+  - !Scalar { name: gtex_eqtl, prefix: "-eqtl", value: *GTEX_EQTL_ANNOT_FILE }
 
   - !Range { name: tissue, file_list: *GTEX_EQTL_TISSUES_FILE,
      metadata_rules: [ !SaveValueInMetadata { path: tissue/name } ]
      }
 
   - !ArgumentFromMetadata
-    {name: tissue_param, prefix: "-t", format_rule: "{tissue}",
+    {name: tissue_param, prefix: "-tissue", format_rule: "{tissue}",
           sources: [ {path: tissue/name, destination: tissue} ]}
 
 
@@ -49,13 +49,13 @@ arguments:
     name: prefix
   #    prefix: "-prefix"
     prepend: *RESULTS_FOLDER
-    format_rule: "fastenloc-{trait}-{tissue}"
+    format_rule: "{trait}/fastenloc-{trait}-{tissue}"
     sources: [ {path: trait, destination: trait},
                {path: tissue/name, destination: tissue },
     ]
 
   - !ArgumentFromMetadata
     name: "job_name"
-    format_rule: "{tissue}_{trait}_fastenloc"
+    format_rule: "{trait}_{tissue}_fastenloc"
     sources: [ {path: trait, destination: trait}, {path: tissue/name, destination: tissue} ]
 
