@@ -3,6 +3,15 @@
 These scripts are intended to be run on the CRI cluster at the University of
 Chicago. They should be adapted if used in another cluster.
 
+# Compilation of fastENLOC
+
+In CRI, it's necessary to run this command to load some necessary modules for
+compilation:
+
+```bash
+$ module load gcc/6.2.0 gsl/1.16 boost/1.70.0 zlib/1.2.11 bzip2
+```
+
 # Dependencies
 
 For miniconda installation (required), download this file:
