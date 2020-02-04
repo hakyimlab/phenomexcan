@@ -1,17 +1,21 @@
 #!/bin/bash
 
-GWAS_DIR="/scratch/mpividori/gwas2gene/data/gwas_omim_silver/"
-PHENO=$1
+GWAS_PHENO_FILE="$1"
+GENES_ANNOTATIONS_FILE="/home/miltondp/projects/labs/hakyimlab/phenomexcan/base/data/gwas2gene/annotations_gencode_v26.tsv"
+LD_BLOCKS_FILE="/home/miltondp/projects/labs/hakyimlab/phenomexcan/base/data/gwas2gene/ld_independent_regions.txt"
+
+GWAS_PHENO_FILE_BASE=$(basename -- "$GWAS_PHENO_FILE")
+GWAS_PHENO="${GWAS_PHENO_FILE_BASE%.*.*}"
 
 mkdir -p _results
 
 # optional argument: list of genes to consider
 #  --gene_list_filter /scratch/mpividori/gwas2gene/data/clinvar_genes.txt \
 Rscript ldblock2gene.R \
-  --gwas ${GWAS_DIR}/${PHENO}.txt.gz \
-  --gene_list /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/gwas2gene/annotations_gencode_v26.tsv \
-  --ldblock /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/gwas2gene/ld_independent_regions.txt \
-  --output _results/${PHENO}.rds \
+  --gwas ${GWAS_PHENO_FILE} \
+  --gene_list ${GENES_ANNOTATIONS_FILE} \
+  --ldblock ${LD_BLOCKS_FILE} \
+  --output _results/${GWAS_PHENO}.rds \
   --gwas_pval_lt 5e-8 \
   --source_path rlib.R
 
