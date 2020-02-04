@@ -1,6 +1,7 @@
 import re
 import pickle
 import logging
+from subprocess import run
 
 
 LOG_FORMAT = "[%(filename)s - %(asctime)s] %(levelname)s: %(message)s"
@@ -64,3 +65,12 @@ def is_number(s):
         return True
     except ValueError:
         return False
+
+
+def run_command(command, raise_on_error=True):
+    r = run(command, shell=True)
+
+    if raise_on_error and r.returncode != 0:
+        raise Exception(f'Command "{command}" failed with code {r.returncode}')
+
+    return r
