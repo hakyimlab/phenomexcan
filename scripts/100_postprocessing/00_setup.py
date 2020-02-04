@@ -117,7 +117,7 @@ def download_fastenloc_tissues(**kwargs):
     final_output_file = conf.FASTENLOC_GTEX_TISSUES_FILE
     output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
     os.system(f'wget https://uchicago.box.com/shared/static/t7866iiivxa2rdg8n8hx6w3p1rc0sq2t.txt -O {output_file}')
-    os.system(f'echo "f969ea9a442cd8a347824627a5ac12df {output_file}" | md5sum -c')
+    _check_md5('f969ea9a442cd8a347824627a5ac12df', output_file)
     os.system(f'mv {output_file} {final_output_file}')
 
 
@@ -156,7 +156,7 @@ def download_enloc_selected_traits(**kwargs):
     final_output_file = os.path.join(conf.MISC_RESULTS_BASE_DIR, 'enloc-selected_traits.tar.gz')
     output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
     os.system(f'wget https://uchicago.box.com/shared/static/i9ox9xeb0ajczssy275e311hmeu0xkhg.gz -O {output_file}')
-    os.system(f'echo "8909da0618eab99355b203a075c0c952 {output_file}" | md5sum -c')
+    _check_md5('8909da0618eab99355b203a075c0c952', output_file)
     os.system(f'mv {output_file} {final_output_file}')
     os.system(f'tar -xf {final_output_file} -C {conf.MISC_RESULTS_BASE_DIR}')
 
