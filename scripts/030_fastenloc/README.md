@@ -3,6 +3,10 @@
 These scripts are intended to be run on the CRI cluster at the University of
 Chicago. They should be adapted if used in another cluster.
 
+Please, use the `full_run` to reproduce the results in PhenomeXcan. The
+`fast_run` is inteded to use when `alpha0` and `alpha1` were previously
+calculated.
+
 # Compilation of fastENLOC
 
 In CRI, it's necessary to run this command to load some necessary modules for
