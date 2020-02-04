@@ -12,6 +12,7 @@ dependencies:
   - pip=19.1
   - python=3.7
   - r-essentials=3.6
+  - r-optparse=1.6
   - rpy2=2.9
   - scikit-learn=0.21
   - scipy=1.3
