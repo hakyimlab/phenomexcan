@@ -30,6 +30,9 @@ GENES_METADATA_DIR = join(DATA_DIR, 'genes_metadata')
 RAPID_GWAS_PHENO_INFO_FILE = join(DATA_DIR, 'phenotypes.both_sexes.tsv.gz')
 GTEX_GWAS_PHENO_INFO_FILE = join(DATA_DIR, 'gtex_gwas_phenotypes_metadata.tsv')
 
+# gwas2gene files
+GWAS2GENE_DIR = join(DATA_DIR, 'gwas2gene')
+
 # Clinvar
 CLINVAR_DATA_FILE = join(DATA_DIR, '2019-07-16-gene_condition_source_id')
 

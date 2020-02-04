@@ -87,6 +87,24 @@ def download_genes_information(**kwargs):
     os.system(f'mv {output_file} {final_output_file}')
 
 
+def download_gwas2gene_files(**kwargs):
+    os.makedirs(conf.GWAS2GENE_DIR, exist_ok=True)
+
+    # annotations_gencode_v26.tsv
+    final_output_file = os.path.join(conf.GWAS2GENE_DIR, 'annotations_gencode_v26.tsv')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/d5v1450dzdhk80fxecil1jlio8cbxf16.tsv -O {output_file}')
+    _check_md5('74b29e90ff96cccbf9fe1b3308796a84', output_file)
+    os.system(f'mv {output_file} {final_output_file}')
+
+    # ld_independent_regions.txt
+    final_output_file = os.path.join(conf.GWAS2GENE_DIR, 'ld_independent_regions.txt')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/3qhph7cg9kz5uy20osfy9j05jnvh6jgq.txt -O {output_file}')
+    _check_md5('2ec973243aa87bdb8daa36f4d2f54f20', output_file)
+    os.system(f'mv {output_file} {final_output_file}')
+
+
 def download_clinvar_data(**kwargs):
     final_output_file = conf.CLINVAR_DATA_FILE
     output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
