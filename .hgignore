@@ -109,3 +109,4 @@ venv.bak/
 scripts/200_webapp/shinyapp/.Rproj.user/
 .Rhistory
 rsconnect/shinyapps.io/imlab/*.dcf
+base/
