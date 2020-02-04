@@ -99,7 +99,7 @@ def download_fastenloc_tissues(**kwargs):
     final_output_file = conf.FASTENLOC_GTEX_TISSUES_FILE
     output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
     os.system(f'wget https://uchicago.box.com/shared/static/t7866iiivxa2rdg8n8hx6w3p1rc0sq2t.txt -O {output_file}')
-    os.system(f'echo "b31c47aa56ca9fdbac3bee5b3a38ba63 {output_file}" | md5sum -c')
+    os.system(f'echo "f969ea9a442cd8a347824627a5ac12df {output_file}" | md5sum -c')
     os.system(f'mv {output_file} {final_output_file}')
 
 
