@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -N {{job_name}}
+#PBS -S /bin/bash
+#PBS -l walltime={{job_walltime}}
+#PBS -l mem={{job_memory}}
+#PBS -l nodes=1:ppn={{ n_cpu }}
+
+#PBS -o {{logs_folder}}/{% raw %}${PBS_JOBNAME}.o${PBS_JOBID}.log{% endraw %}
+#PBS -e {{logs_folder}}/{% raw %}${PBS_JOBNAME}.e${PBS_JOBID}.err{% endraw %}
+
+module load gcc/6.2.0 gsl/1.16 boost/1.70.0 zlib/1.2.11 bzip2
+
+{% raw %}cd $PBS_O_WORKDIR {% endraw %}
+
+export MKL_NUM_THREADS={{ n_cpu }}
+export OPEN_BLAS_NUM_THREADS={{ n_cpu }}
+export NUMEXPR_NUM_THREADS={{ n_cpu }}
+export OMP_NUM_THREADS={{ n_cpu }}
+
+mkdir -p "$(dirname {{ prefix }})"
+
+A0="$(cat {{ enrichment_stats_file }} | grep -E '{{ tissue }}\s+{{ trait }}\s+' | cut -f3)"
+A1S="$(cat {{ enrichment_stats_file }} | grep -E '{{ tissue }}\s+{{ trait }}\s+' | cut -f7)"
+
+{{ command }} \
+{{ gtex_eqtl }} \
+-gwas {{ pip }} \
+{{ tissue_param }} \
+-prefix {{ prefix }} \
+-a0 $A0 \
+-a1 $A1S
+
+
+#rm {{ prefix }}.enloc.snp.out
+
+#echo "Compressing"
+#gzip {{ prefix }}.enloc.sig.out
+
+printf "done\n"
+
