@@ -9,6 +9,9 @@ calculated.
 
 # Compilation of fastENLOC
 
+We downloaded a compiled a static version of fastENLOC using commit
+5ae0492bdc3546c16530a84a9157f9ea5160f751.
+
 In CRI, it's necessary to run this command to load some necessary modules for
 compilation:
 
