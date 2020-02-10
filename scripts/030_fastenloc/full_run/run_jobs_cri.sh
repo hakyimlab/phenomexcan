@@ -26,8 +26,8 @@ do
     while [ $(qstat -i | wc -l) -gt 4000 ]
     do
         n_jobs=$(qstat -i | wc -l)
-        sleep 10m
         echo "Not yet for ${tissue} (${n_jobs} now)"
+        sleep 10m
     done
 
     echo $(date)
