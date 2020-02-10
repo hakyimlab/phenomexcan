@@ -45,7 +45,7 @@ get_genes <- function() { get_distinct_('genes', "gene_name") }
 get_tissues <- function() { get_distinct_('tissues', "name") }
 get_clinvar_phenotypes <- function() { get_distinct_('clinvar_phenotypes', "description") }
 
-to_sql_list <- function(s) { sprintf("(values %s)", toString(sprintf("('%s')", s))) }
+to_sql_list <- function(s) { sprintf("(values %s)", toString(sprintf("('%s')", gsub("\'", "\'\'", s)))) }
 
 ###############################################################################
 
