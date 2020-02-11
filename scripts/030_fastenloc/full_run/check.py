@@ -15,6 +15,12 @@ parser.add_argument('--job-template', type=str, required=False, default='{pheno_
 parser.add_argument('--tissue', type=str, required=True)
 args = parser.parse_args()
 
+# This command below is an example to run all pending jobs on all tissues:
+#
+# $ cat /gpfs/data/im-lab/nas40t2/miltondp/phenomexcan/misc/gtex_v8.eqtl_annot.tissues.txt | \
+#       parallel -j2 'python check.py --tissue {}' | xargs -n 1 qsub
+#
+
 all_files_path = join(args.results_dir, f'**/fastenloc-*-{args.tissue}.*.out')
 all_files = glob(all_files_path)
 if len(all_files) == int(3 * 4049):
