@@ -32,7 +32,7 @@ library(dplyr)
 source(opt$source_path)
 
 get_gwas_lead_for_ldblock = function(filename, ldblock, cutoff_p_gt, cutoff_p_lt) {
-  df = fread(paste0('zcat ', filename, ' | cut -f 2,3,4,8'), header = T, sep = '\t')
+  df = fread(paste0('zcat ', filename, ' | cut -f 2,3,4,8,11'), header = T, sep = '\t')
   if(nrow(df) == 0) {
     return(data.frame())
   }
@@ -60,8 +60,11 @@ get_gwas_lead_for_ldblock = function(filename, ldblock, cutoff_p_gt, cutoff_p_lt
     sub$end = ldblock$end[i]
     df_all = rbind(df_all, sub)
   }
-  colnames(df_all) = c('lead_var', 'chr', 'pos', 'pval', 'cs_idx', 'region_start', 'region_end')
-  df_all[, c('cs_idx', 'lead_var', 'chr', 'pos', 'region_start', 'region_end')]
+  if (ncol(df_all) > 0) {
+    colnames(df_all) = c('lead_var', 'chr', 'pos', 'pval', 'cs_idx', 'region_start', 'region_end')
+    return(df_all[, c('cs_idx', 'lead_var', 'chr', 'pos', 'region_start', 'region_end')])
+  }
+  return(df_all)
 }
 
 

@@ -1,10 +1,9 @@
 #!/bin/bash
 
-GWAS_DIR="/scratch/mpividori/gwas2gene/data/gwas_omim_silver/"
+GWAS_DIR="/home/miltondp/projects/labs/hakyimlab/phenomexcan/base/results/misc/gwas_parsing/full"
 
 # generate list of files with first extension
-parallel --tmpdir /scratch/mpividori/tmp/ -j1 'echo {/.}' ::: ${GWAS_DIR}/*.txt.gz > list
+#parallel --tmpdir /scratch/mpividori/tmp/ -j1 'echo {/.}' ::: ${GWAS_DIR}/*.txt.gz > list
 
-# run Yanyu's script
-parallel --tmpdir /scratch/mpividori/tmp/ -j4 'bash run_gwas2gene.sh {/.}' < list
-
+# run gwas2gene
+cat selected_ukb_traits_omim.txt | parallel -j2 "bash run_gwas2gene.sh ${GWAS_DIR}/{}.txt.gz"
