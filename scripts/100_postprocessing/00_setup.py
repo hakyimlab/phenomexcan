@@ -21,6 +21,7 @@ def _create_directories():
     os.makedirs(conf.SMULTIXCAN_RESULTS_BASE_DIR, exist_ok=True)
     os.makedirs(conf.OMIM_SILVER_STANDARD_BASE_DIR, exist_ok=True)
     os.makedirs(conf.MISC_RESULTS_BASE_DIR, exist_ok=True)
+    os.makedirs(conf.VALIDATION_TRAITS_T2D_BASE_DIR, exist_ok=True)
 
 
 def download_mashr_models(**kwargs):
@@ -70,6 +71,12 @@ def download_omim_standard_gwas2gene(**kwargs):
     _check_md5('ceeb0e72407afaf95409971b4721bf7e', output_file)
     os.system(f'tar -C {conf.OMIM_SILVER_STANDARD_BASE_DIR} -xf {output_file}')
 
+def download_t2d_gwas2gene(**kwargs):
+    final_output_file = os.path.join(conf.RESULTS_DIR, 't2d_gwas2gene.tar.gz')
+    output_file = os.path.join(conf.TMP_DIR, os.path.basename(final_output_file))
+    os.system(f'wget https://uchicago.box.com/shared/static/ty7i6lsm59szs9snxpxzhidt4cvt3xpj.gz -O {output_file}')
+    _check_md5('4b8661ce502a37e70928b3fd7df3c068', output_file)
+    os.system(f'tar -C {conf.VALIDATION_TRAITS_T2D_BASE_DIR} -xf {output_file}')
 
 def download_gtex_gwas_pheno_info(**kwargs):
     final_output_file = conf.GTEX_GWAS_PHENO_INFO_FILE
