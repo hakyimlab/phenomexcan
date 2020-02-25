@@ -44,6 +44,8 @@ def save_info_file(base_dir, n_expected_rows, output_file, gtex_gwas_code_func, 
     smultixcan_box_info = smultixcan_box_info.sort_values('pheno_id')
     smultixcan_box_info = smultixcan_box_info.drop(columns=['pheno_id'])
 
+    print(f'Writing to {output_file}')
+
     smultixcan_box_info.to_excel(output_file)
 
 
@@ -74,7 +76,7 @@ save_info_file(
     conf.FASTENLOC_EXPECTED_PHENOTYPES,
     os.path.join(OUTPUT_DIR, 'fastenloc_box_pheno_info.xlsx'),
     lambda x: x.split('.tar.gz')[0].split('enloc-')[1],
-    lambda x: x.split('.tar.bz2')[0].split('fastenloc-')[1],
+    lambda x: x.split('.tar.bz2')[0].split('fastenloc-v2-')[1],
 )
 
 ### TORUS
