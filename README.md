@@ -5,23 +5,7 @@
 
 ## Summary
 
-Large-scale genomic and transcriptomic initiatives offer unprecedented ability to study the biology of complex traits 
-and identify target genes for precision prevention or therapy. Translation to clinical contexts, however, has been slow
-and challenging due to lack of biological context for identified variant-level associations. Moreover, many
-translational researchers lack the computational or analytic infrastructures required to fully use these resources. We
-integrate genome-wide association study (GWAS) summary statistics from multiple publicly available sources and data from
-Genotype-Tissue Expression (GTEx) v8 using PrediXcan and provide a user-friendly platform for translational researchers
-based on state-of-the-art algorithms. We develop a novel Bayesian colocalization method, fastENLOC, to prioritize the
-most likely causal gene-trait associations. Our resource, PhenomeXcan, synthesizes 8.87 million variants from GWAS on
-4,091 traits with transcriptome regulation data from 49 tissues in GTEx v8 into an innovative, gene-based resource
-including 22,255 genes. Across the entire genome/phenome space, we find 65,603 significant associations
-(Bonferroni-corrected p-value of 5.5e-10), where 19,579 (29.8 percent) were colocalized (locus regional
-colocalization probability > 0.1). We successfully replicate associations from PheWAS Catalog (AUC=0.61) and OMIM
-(AUC=0.64). We provide examples of (a) finding novel and underreported genome-to-phenome associations, (b) exploring
-complex gene-trait clusters within PhenomeXcan, (c) studying phenome-to-phenome relationships between common and rare
-diseases via further integration of PhenomeXcan with ClinVar, and (d) evaluating potential therapeutic targets.
-PhenomeXcan (http://phenomexcan.org) broadens access to complex genomic and transcriptomic data and empowers
-translational researchers.
+Large-scale genomic and transcriptomic initiatives offer unprecedented insight into complex traits, but clinical translation remains limited by variant-level associations without biological context and lack of analytic resources. Our resource, PhenomeXcan, synthesizes 8.87 million variants from genome-wide association study (GWAS) summary statistics on 4,091 traits with transcriptomic data from 49 tissues in Genotype-Tissue Expression (GTEx) v8 into a gene-based, queryable platform including 22,515 genes. We developed a novel Bayesian colocalization method, fastENLOC, to prioritize likely causal gene-trait associations. We successfully replicate associations from PheWAS Catalog (AUC=0.62), OMIM (AUC=0.64), and an evidence-based curated gene list (AUC=0.67). Using PhenomeXcan results, we provide examples of novel and underreported genome-to-phenome associations, complex gene-trait clusters, shared causal genes between common and rare diseases via further integration of PhenomeXcan with ClinVar, and potential therapeutic targets. PhenomeXcan (http://phenomexcan.org/) provides broad, user-friendly access to complex data for translational researchers.
 
 # News
 - **2020/02/25**: We have updated the fastENLOC results, so if you are using them, please, download them again!
