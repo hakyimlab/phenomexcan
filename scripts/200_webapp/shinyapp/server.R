@@ -11,6 +11,10 @@ source("pairs_info_module.R")
 ###############################################################################
 
 render_results <- function(data) {
+  if (nrow(data) > 0) {
+    data = transform(data, rcp = ifelse((is.na(rcp)) & (phenotype_source == 'UK Biobank'), 0.0, rcp))
+  }
+
   render <- DT::datatable(data,
     class = 'compact display',
     options = list(

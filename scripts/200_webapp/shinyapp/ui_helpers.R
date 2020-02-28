@@ -1,5 +1,5 @@
 appTitle_ <- "PhenomeXcan"
-releaseDate_ <- "Release date: December 28, 2019."
+releaseDate_ <- "Release date: February 28, 2020."
 
 alertMessage_ <- ""  # Write an alert message here
 
@@ -41,7 +41,7 @@ modelsInfo <- function(){
         p("Columns meaning:
         phenotype_source ('UK Biobank' refer to our 4,049 traits from this cohort, other values indicate
         different cohorts);
-        rcp (Regional Colocalization Probability from fastENLOC);
+        rcp (Regional Colocalization Probability from fastENLOC/ENLOC; zero for UK Biobank means <1e-4);
         pvalue (p-value from S-MultiXcan);
         best_sign (contains the sign of effect of the most significant tissue; '+' ('-') means higher (lower) expression is
         associated with higher risk or higher value of phenotype);
